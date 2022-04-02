@@ -1,5 +1,8 @@
 import java.io.*;
 import java.util.ArrayList;
+/* Student class extends account
+* you can add a grade or get grades for a particular student
+*/
 
 public class Student extends account {
     public static ArrayList<String> quizGrades = new ArrayList<>();
