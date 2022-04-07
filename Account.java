@@ -3,6 +3,8 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+//I added some getters and setters -Joy
+
 public class Account {
     private String password;
     private String username;
@@ -19,6 +21,14 @@ public class Account {
         this.accounts = new ArrayList<String[]>();
         this.teachers = new ArrayList<String[]>();
         this.students = new ArrayList<String[]>();
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void createAccount(String username,
@@ -54,7 +64,8 @@ public class Account {
             counter++;
         }
         if (accountExists == false){
-            throw new InvalidAccountException();
+            //I add a message string because it was giving an error.  Feel free to change it -Joy
+            throw new InvalidAccountException("This account doesn't exist!");
         }
         FileOutputStream fos = new FileOutputStream("Accounts.txt", false);
         PrintWriter pw = new PrintWriter(fos);
