@@ -2,24 +2,23 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Quiz {
-    private boolean teacher;
-    private boolean student;
-    private String[] question;
+public class Quiz extends Question {
+    private Account accountType;
+    private Question question;
     private String filename;
 
     Scanner in = new Scanner(System.in);
 
-    public Quiz(boolean teacher, boolean student, Question question, String filename) {
-        this.teacher = teacher;
-        this.student = student;
-        this.question = new String[5];
+    public Quiz(Account accountType, Question question, String filename) {
+        //should i extend account and use getTeacher/Student?
+        this.accountType = accountType;
+        this.question = question;
         this.filename = filename;
     }
 
-    public void addQuiz(String filename, Question question) throws IncorrectAccountException, FileNotFoundException {
+    public Question addQuiz(String filename, Question question) throws IncorrectAccountException, FileNotFoundException {
         try {
-            if (teacher) {
+            if (accountType instanceof Teacher) {
                 File f = new File(filename);
                 if (!f.exists()) {
                     f.createNewFile();
@@ -27,6 +26,8 @@ public class Quiz {
                 FileOutputStream fos = new FileOutputStream(f);
                 PrintWriter pw = new PrintWriter(fos);
                 pw.println(question);
+                pw.close();
+                fos.close();
             } else {
                 throw new IncorrectAccountException("A student cannot create a new quiz!");
             }
@@ -39,8 +40,9 @@ public class Quiz {
         }
     }
 
-    public void editQuiz(String filename, String questionNumber, String firstChoice, String secondChoice, String thirdChoice, String fourthChoice) throws IncorrectAccountException {
-        if (teacher) {
+    /*
+    public void editQuiz(Account accountType, String filename, String questionNumber, String firstChoice, String secondChoice, String thirdChoice, String fourthChoice) throws IncorrectAccountException {
+        if (accountType instanceof Teacher) {
             System.out.println("Do you want to add a question? \n1.Yes\n2.No");
             int addQuestion = in.nextInt();
             in.nextLine();
@@ -122,35 +124,98 @@ public class Quiz {
 
      */
 
-    public void addQuestion(String[] question, String filename) throws IncorrectAccountException, IOException {
-        if (teacher) {
+    public void addQuestion(Account accountType, String actualQuestion, String optionOne, String optionTwo, String optionThree, String optionFour) throws IncorrectAccountException{
+        //TODO do we want to return question also
+
+        if (accountType instanceof Teacher) {
+
+            questionLines = new String[4];
+
             File f = new File(filename);
             if (!f.exists()) {
                 f.createNewFile();
             }
-            BufferedReader bfr = new BufferedReader(new FileReader(f));
-            FileOutputStream fos = new FileOutputStream(f);
+
+            FileOutputStream fos = new FileOutputStream(f, true);
             PrintWriter pw = new PrintWriter(fos);
-            pw.println(question);
+
+            /*System.out.println("What question do you want to add?");
+            questionNumber = in.nextLine();
+            actualQuestion = questionNumber;
+            System.out.println("Type in your answer first answer choice.");
+            firstChoice = in.nextLine();
+            question[0] = firstChoice;
+            System.out.println("Type your second choice");
+            secondChoice = in.nextLine();
+            question[1] = secondChoice;
+            System.out.println("Type your third choice");
+            thirdChoice = in.nextLine();
+            question[2] = thirdChoice;
+            System.out.println("Type your fourth choice");
+            fourthChoice = in.nextLine();
+            question[3] = fourthChoice;
+             */
+
+            question[0] = optionOne;
+            question[1] = optionTwo;
+            question[2] = optionThree;
+            question[3] = optionFour;
+
+            Question questionCall = new Question(actualQuestion, question);
+            pw.println(questionCall);
+
+            pw.close();
+            fos.close();
+
         } else {
             throw new IncorrectAccountException("A student cannot create a question!");
         }
-
     }
 
-    public void deleteQuestion(String[] question, String filename) {
+    public void deleteQuestion(Account accountType, String actualQuestion, String filename) {
         //putting questions into an array list and finding the question from the list and delete that question and the four options
-        if (teacher) {
+        if (accountType instanceof Teacher) {
+            String[] option = new String[4];
+            int i = 0;
             String line = "";
             ArrayList<String> list = new ArrayList<>();
-            ArrayList<line> questionList = new ArrayList<>();
             try (BufferedReader bfr = new BufferedReader(new FileReader(filename))) {
                 while ((line = (bfr.readLine())) != null) {
                     list.add(line);
-                    for (int i = 0; i < list.size(); i+=5) {
-                        questionList.add(line);
-                    }
                 }
+
+                list.get(list.indexOf(actualQuestion));
+                //FIXME add into a for loop
+
+                option[0] = list.get(list.indexOf(actualQuestion)++);
+                option[1] = list.get(list.indexOf(actualQuestion) + 2);
+                option[2] = list.get(list.indexOf(actualQuestion) + 3);
+                option[3] = list.get(list.indexOf(actualQuestion) + 4);
+
+                Question questionCall = new Question(actualQuestion, option);
+                //TODO possibly change actualQuestion into an integer?
+                while (i < 5) {
+                    list.remove(list.indexOf(actualQuestion));
+                    i++;
+                }
+
+                /*
+                list.remove(list.indexOf(actualQuestion)++);
+                list.remove(list.indexOf(actualQuestion) + 2);
+                list.remove(list.indexOf(actualQuestion) + 3);
+                list.remove(list.indexOf(actualQuestion) + 4);
+                 */
+
+                File f = new File(filename);
+                //noQuestionsFoundException?
+                FileOutputStream fos = new FileOutputStream(f, false);
+                PrintWriter pw = new PrintWriter(fos);
+                pw.println(list);
+
+                questionCall.numQuestions(list, filename);
+                pw.close();
+                fos.close();
+                bfr.close();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
