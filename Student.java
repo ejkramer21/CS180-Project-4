@@ -27,7 +27,7 @@ public class Student extends account {
                 System.out.println(quizDetails[0] + " - " + quizDetails[1]);
             }
         } catch (IOException e) {
-            //NoGradesFoundException();
+            throw new NoGradesFoundException("This student has no grades!");
             return false;
         }
         return true;
