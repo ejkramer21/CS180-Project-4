@@ -117,14 +117,58 @@ public class MainClassTest {
                                 System.out.println(studentInputs);
                                 studentInput = scan.nextInt();
                                 scan.nextLine();
-                            } while (studentInput > 2 || studentInput < 1);
+                                if (studentInput!= 1 && studentInput != 2) {
+                                    System.out.println("Error. You need to either type 1 or 2.");
+                                }
+                            } while (studentInput != 1 && studentInput != 2);
 
                             if (studentInput == 1) {
                                 //function to get grade of user selected
+                                System.out.println("Which quiz would you like to take?");
+                                String filename = scan.nextLine();
+                                File f = new File(filename + ".txt");
+                                if (!f.exists()) {
+                                    System.out.println("It looks like you may have mistyped the quiz name");
+                                } else {
+                                    //TODO Finish this
+                                    Quiz quiz = new Quiz("Student", filename, password, username);
+                                   int numQuestions =  quiz.numberQuestions(filename);
+                                   String[] grades = new String[numQuestions + 1];
+                                   for (int i = 0; i <= numQuestions; i++) {
+                                       //FIXME this is not based on the individual question, but on the entire quiz
+                                       grades[i] = i + ". " + quiz.getPointsEarned() + "/" + quiz.getPossiblePointValues();
+                                       //TODO I want the last line to be the total points earned/total possible points
+                                   }
+                                }
                             } else {
                                 do {
                                     System.out.println(quizNameFileInput);
                                     quizNameFile = scan.nextLine();
+                                    File f = new File(quizNameFile + ".txt");
+                                    if (!f.exists()) {
+                                        System.out.println("This is not in our system!");
+                                    } else {
+                                        Quiz quiz = new Quiz("Student", quizNameFile, password, username);
+                                        BufferedReader bfrQuiz = new BufferedReader(new FileReader(f));
+                                        String line = "";
+                                        while ((line = bfrQuiz.readLine()) != null) {
+                                            for (int i = 0; i < (quiz.numberQuestions(quizNameFile)) * 6; i++) {
+                                                if (i % 5 == 0) {
+                                                    System.out.println("");//This is the answer line.  Student will only see a space
+                                                    int answer = scan.nextInt();
+                                                    if (answer == Integer.parseInt(line)) {
+                                                        //FIXME I think I need to do something about my getters and setters within quiz
+                                                        //FIXME i'm just not sure what yet
+                                                        quiz.setPointsEarned(quiz.getPointsEarned().add(question.getPointValue()));
+                                                    } else {
+                                                        quiz.setPointsEarned(quiz.getPointsEarned().add(question.getPointValue() - question.getPointValue()));
+                                                    }
+                                                } else {
+                                                    System.out.println(line);
+                                                }
+                                            }
+                                        }
+                                    }
                                 } while (//function that checks if it is false/null);
                                 //function to run quiz and prompt user input (somehow)
                         }
