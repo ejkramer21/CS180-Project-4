@@ -20,7 +20,7 @@ public class Student extends Account {
      */
     public boolean readGrades() throws NoGradesFoundException {
         try {
-            File f1 = new File((getUserName() + ".txt"));
+            File f1 = new File((getUsername() + ".txt"));
             FileReader fr1 = new FileReader(f1);
             BufferedReader bfr = new BufferedReader(fr1);
             String tempLine;
@@ -61,7 +61,7 @@ public class Student extends Account {
         int totalGrade = 0;
         double finalGrade;
         try {
-            File f1 = new File((getUserName() + ".txt"));
+            File f1 = new File((getUsername() + ".txt"));
             FileWriter fr1 = new FileWriter(f1, true);
             BufferedWriter bfw = new BufferedWriter(fr1);
             bfw.write((quizName + "\n"));
