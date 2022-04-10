@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.ArrayList;
 
-public class Student extends account {
+public class Student extends Account {
     public ArrayList<String> quizGrades = new ArrayList<>();
     public ArrayList<String> quizNames = new ArrayList<>();
     public ArrayList<String> quizTotal = new ArrayList<>();
