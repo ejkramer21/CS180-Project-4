@@ -3,16 +3,19 @@ Question 1
 2. Option 2
 3. Option 3
 4. Option 4
-2
+2 //Point Value
+3 // Answer
 Question 2
 1. Option 1
 2. Option 2
 3. Option 3
 4. Option 4
 4
+5
 Question 3
 1. Option 1
 2. Option 2
 3. Option 3
 4. Option 4
 3
+4

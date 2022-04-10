@@ -26,9 +26,7 @@ public class Quiz {
         this.filename = filename;
         this.password = password;
         this.username = username;
-        //TODO figure out how to initialize quiz without make a whole new account
-        Account account = new Account(username, password, userType);
-        this.userType = account.getUserType();
+        this.userType = userType;
     }
 
     //constructor for the student
@@ -54,8 +52,33 @@ public class Quiz {
         this.pointsEarned = pointsEarned;
     }
 
+    public int numberQuestions(String filename) {
+        int numQuestions = 0;
+        File f = new File(filename);
+        if (f.exists()) {
+            try {
+                BufferedReader bfr = new BufferedReader(new FileReader(f));
+                String quizLine = "";
+                int counter = 0;
+                numQuestions = 0;
+                while ((bfr.readLine()) != null) {
+                    counter++;
+                }
+                if (counter % 6 == 0) {
+                    numQuestions++;
+                }
+                bfr.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("The file isn't in our system");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return numQuestions;
+    }
+
     public void addQuiz(String filename, String question, String optionOne, String optionTwo, String optionThree,
-                        String optionFour, int answer) throws IncorrectAccountException, FileNotFoundException {
+                        String optionFour, int answer, int pointValue) throws IncorrectAccountException, FileNotFoundException {
         try {
             if (userType.equalsIgnoreCase("2")) {
                 //This is creating the original quiz with just the first question.  The constructor for this one should be Question(String question, String[] option, int answer).
@@ -73,7 +96,7 @@ public class Quiz {
 
                     FileOutputStream fos = new FileOutputStream(studentTestFile, false);
                     PrintWriter pw = new PrintWriter(fos);
-                    Question firstQuestion = new Question(question, options, answer);
+                    Question firstQuestion = new Question(question, options, pointValue, answer);
                     pw.println(firstQuestion);
                     pw.close();
                     fos.close();
@@ -127,7 +150,7 @@ public class Quiz {
                 pointsPossible.add(pointValue);
                 setPossiblePointValues(pointsPossible);
 
-                Question questionCall = new Question(actualQuestion, options, answer);
+                Question questionCall = new Question(actualQuestion, options, pointValue, answer);
                 pw.println(questionCall);
                 pw.close();
                 fos.close();
@@ -161,7 +184,7 @@ public class Quiz {
                 }
 
                 //Question questionCall = new Question(actualQuestion, option, answer);
-                while (i < 6) {
+                while (i < 7) {
                     //is 6 because we also have the int of answer in the file
                     questionComponents.remove(questionComponents.indexOf(actualQuestion));
                     i++;
@@ -176,14 +199,14 @@ public class Quiz {
                 fos.close();
 
                 //this is resetting so the questions stored in the quiz no longer includes the removed question
-                if (questionComponents.size() % 6 == 0) {
+                if (questionComponents.size() % 7 == 0) {
                     String[] newOptions = new String[4];
                     int j = 0;
                     for (i = 0; i < questionComponents.size(); i++) {
                         for (j = 0; j < 5; j++) {
                             newOptions[j] = questionComponents.get(i + 1);
                         }
-                        new Question(questionComponents.get(i), newOptions, Integer.parseInt(questionComponents.get(j + 1)));
+                        new Question(questionComponents.get(i), newOptions, Integer.parseInt(questionComponents.get(j + 2)), Integer.parseInt(questionComponents.get(j + 1)));
                     }
                 }
             } catch (IOException e) {
@@ -204,7 +227,7 @@ public class Quiz {
         String individualQuestion = "";
         while((line = bfr.readLine()) != null){
             counter++;
-            if(counter % 5 == 0){
+            if(counter % 7 == 0){
                 this.allQuizQuestions.add(individualQuestion);
                 individualQuestion = "";
                 counter = 0;
@@ -213,6 +236,7 @@ public class Quiz {
                 individualQuestion = individualQuestion + line + "\n";
             }
         }
+        bfr.close();
     }
 
     //sample main method for adding quiz

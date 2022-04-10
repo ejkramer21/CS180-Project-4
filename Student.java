@@ -38,6 +38,7 @@ public class Student extends Account {
                 }
 
             }
+            bfr.close();
         } catch (IOException e) {
             throw new NoGradesFoundException("This student has no grades!");
         }

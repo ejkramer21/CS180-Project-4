@@ -97,13 +97,11 @@ public class Account {
     }
 
     public void sortIdentity() {
-        students = new ArrayList<String[]>();
-        teachers = new ArrayList<String[]>();
         for (String[] account : this.accounts) {
             if (account[2].equals("1")) {
-                students.add(account);
+                this.students.add(account);
             } else {
-                teachers.add(account);
+                this.teachers.add(account);
             }
         }
     }
