@@ -15,6 +15,8 @@ public class Quiz {
     private String username;
     private ArrayList<Integer> possiblePointValues;
     private ArrayList<Integer> pointsEarned;
+    private ArrayList<String> allQuizQuestions;
+    private ArrayList<String> randomizedQuizQuestions;
 
     Scanner in = new Scanner(System.in);
 
@@ -24,14 +26,14 @@ public class Quiz {
         this.filename = filename;
         this.password = password;
         this.username = username;
-        //TODO figure out how to initilize quiz without make a whole new account
+        //TODO figure out how to initialize quiz without make a whole new account
         Account account = new Account(username, password, userType);
         this.userType = account.getUserType();
     }
 
     //constructor for the student
     public Quiz(String userType, String filename, String password, String username) {
-        Account account = new Account(username,password,userType);
+        Account account = new Account(username, password, userType);
         this.userType = account.getUserType();
         this.filename = filename;
     }
@@ -53,9 +55,9 @@ public class Quiz {
     }
 
     public void addQuiz(String filename, String question, String optionOne, String optionTwo, String optionThree,
-                            String optionFour, int answer) throws IncorrectAccountException, FileNotFoundException {
+                        String optionFour, int answer) throws IncorrectAccountException, FileNotFoundException {
         try {
-            if (userType.equalsIgnoreCase("Teacher")) {
+            if (userType.equalsIgnoreCase("2")) {
                 //This is creating the original quiz with just the first question.  The constructor for this one should be Question(String question, String[] option, int answer).
                 //Above constructor is the one being printed to file in this method
                 //AND Question(String question, int pointValue) so two files are created.  One has the point values and question and other is for student to actually take test
@@ -92,18 +94,25 @@ public class Quiz {
     }
 
     public void randomize() {
-
+        int questionCount = this.allQuizQuestions.size();
+        ArrayList<String> tempArray = this.allQuizQuestions;
+        while(questionCount != 0){
+            int randomQuestionNumber = (int) Math.random() * (questionCount - 1);
+            this.randomizedQuizQuestions.add(tempArray.get(randomQuestionNumber));
+            tempArray.remove(randomQuestionNumber);
+            questionCount--;
+        }
     }
 
-    public void addQuestion(String userType, String actualQuestion, String optionOne, String optionTwo, String optionThree, String optionFour, int pointValue, int answer) throws IncorrectAccountException{
+    public void addQuestion(String userType, String actualQuestion, String optionOne, String optionTwo, String optionThree, String optionFour, int pointValue, int answer) throws IncorrectAccountException {
         //we will want to prompt the user to enter their account information before they may add a question.  I recommend a while loop so the teacher inputs their account info
         //then we begin the while loop and ask if they want to add a question and assign "yes" to an int like 1 and the question prompts(and this method) keep getting called
         //while that int still = 1
         //If the quiz doesn't already exist, you must call the addQuiz method first because this method doesn't create a new file
 
-        if (userType.equalsIgnoreCase("Teacher")) {
+        if (userType.equalsIgnoreCase("2")) {
             //I'm concerned this might be resetting the array list every time.  Gotta figure this out
-            ArrayList<Integer> pointsPossible = new ArrayList<>();
+            ArrayList<Integer> pointsPossible = new ArrayList<Integer>();
             String[] options = new String[4];
             try {
                 File studentTestFile = new File(filename);
@@ -128,14 +137,14 @@ public class Quiz {
                 e.printStackTrace();
             }
 
-            } else{
-                throw new IncorrectAccountException("A student cannot create a question!");
-            }
+        } else {
+            throw new IncorrectAccountException("A student cannot create a question!");
+        }
     }
 
     public void deleteQuestion(String userType, String actualQuestion, String filename, int answer) throws IncorrectAccountException {
         //putting questions into an array list and finding the question from the list and delete that question and the four options
-        if (userType.equalsIgnoreCase("Teacher")) {
+        if (userType.equalsIgnoreCase("2")) {
             String[] option = new String[4];
             int i = 0;
             String line = "";
@@ -170,7 +179,7 @@ public class Quiz {
                 if (questionComponents.size() % 6 == 0) {
                     String[] newOptions = new String[4];
                     int j = 0;
-                    for (i = 0; i < questionComponents.size();i++) {
+                    for (i = 0; i < questionComponents.size(); i++) {
                         for (j = 0; j < 5; j++) {
                             newOptions[j] = questionComponents.get(i + 1);
                         }
@@ -187,9 +196,28 @@ public class Quiz {
         }
     }
 
+    public void readQuiz(String filename) throws IOException {
+        File f = new File(filename);
+        BufferedReader bfr = new BufferedReader(new FileReader(f));
+        int counter = 0;
+        String line = "";
+        String individualQuestion = "";
+        while((line = bfr.readLine()) != null){
+            counter++;
+            if(counter % 5 == 0){
+                this.allQuizQuestions.add(individualQuestion);
+                individualQuestion = "";
+                counter = 0;
+                bfr.readLine();
+            } else {
+                individualQuestion = individualQuestion + line + "\n";
+            }
+        }
+    }
+
     //sample main method for adding quiz
     //doesn't actually work atm because we need to connect with accounts.  This is just a sample to give idea of what this should look like
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         Scanner in = new Scanner(System.in);
         if (account.getUserType.equalsIgnoreCase("Teacher")) {
             System.out.println("Add a quiz");
@@ -259,5 +287,5 @@ public class Quiz {
             }
 
         }
-    }
+    }*/
 }
