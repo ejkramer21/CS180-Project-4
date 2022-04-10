@@ -3,8 +3,6 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-//I added some getters and setters -Joy
-
 public class Account {
     private String password;
     private String username;
@@ -24,13 +22,16 @@ public class Account {
     }
 
     public String getUserType() {
-        return userType;
+        return this.userType;
     }
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
+    public String getPassword(){
+        return this.password;
+    }
     public void createAccount(String username,
                               String password,
                               String userType) throws FileNotFoundException {
@@ -107,10 +108,24 @@ public class Account {
         }
     }
 
-    public static void main(String[] args) throws IOException, InvalidAccountException {
+    public void accountsArrayListAfterReset() throws FileNotFoundException {
+        try {
+            File f = new File("Accounts.txt");
+            BufferedReader bfr = new BufferedReader(new FileReader(f));
+            String line = "";
+            while((line = bfr.readLine()) != null){
+                String[] accountArray = line.split(",");
+                accounts.add(accountArray);
+            }
+        } catch (IOException e){
+            throw new FileNotFoundException("No accounts have been made, accounts.txt does not exist.");
+        }
+    }
+
+    /*public static void main(String[] args) throws IOException, InvalidAccountException {
         Account yes = new Account("user", "pass", "1");
         yes.createAccount("user", "pass", "1");
         yes.editAccount("user", "u","pass", "1");
         //yes.deleteAccount("user", "pass", "1");
-    }
+    }*/
 }
