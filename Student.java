@@ -71,7 +71,7 @@ public class Student extends Account {
                 bfw.write("Q" + (i + 1) + ". " + questionGrade[i] + "/" + questionValue[i] + " ");
                 totalPoints += questionValue[i];
                 totalGrade += questionGrade[i];
-                bfw.write("Student answered: \n" + "Q" + (i+1) + ". " + studentAnswers[i] + " ");
+                bfw.write("Q" + (i+1) + ". " + studentAnswers[i] + " ");
             }
             finalGrade = 100 * (((double) totalGrade)/ ((double) totalPoints));
             bfw.write("\n" + String.format("%.2f", finalGrade) + "\n");
