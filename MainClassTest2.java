@@ -240,30 +240,30 @@ public class MainClassTest2 {
                                                 String question = "";
                                                 int pointValue = 0;
                                                 for (int i = 0; i < 7; i++) {
-                                                    counter++;
-                                                    if (counter == 1) {
+                                                    if (i == 0) {
                                                         question = line;
                                                         System.out.println(line);
-                                                    } else if (counter > 1 && counter < 6) {
+                                                        line = bfrQuiz.readLine();
+                                                    } else if (i > 0 && i < 5) {
                                                         option[j] = line;
                                                         j++;
                                                         System.out.println(line);
-                                                    } else if (counter == 6) {
+                                                        line = bfrQuiz.readLine();
+                                                    } else if (i == 5) {
                                                         //point value line
                                                         pointValue = Integer.parseInt(line);
                                                         possiblePoints.add(pointValue);
-                                                    } else if (counter == 7) {
+                                                        line = bfrQuiz.readLine();
+                                                    } else if (i == 6) {
                                                         //This is the answer line
                                                         answer = scan.nextInt();
                                                         scan.nextLine();
-
                                                         if (answer == Integer.parseInt(line)) {
                                                             pointsAccumulated.add(pointValue);
                                                         } else {
                                                             pointsAccumulated.add(0);
                                                         }
                                                     }
-                                                    bfr.readLine();
                                                 }
                                                 int[] pointsPossible = new int[possiblePoints.size()];
                                                 int[] earnedPoints = new int[pointsAccumulated.size()];
@@ -423,7 +423,6 @@ public class MainClassTest2 {
                                         String question = scan.nextLine();
                                         Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
                                         quiz.deleteQuestion(question, quizName + ".txt");
-                                        System.out.println("Question was successfully deleted");
 
                                         //FIXME This doesn't work
                                     } else if (addOrDelete == 3) {
