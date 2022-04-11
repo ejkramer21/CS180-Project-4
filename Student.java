@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
-
+/**
+ * Student
+ * An implementation of account that allows for the retrieval and addition of grades for the student. Also
+ * allows the file containing the student's grades to be deleted.
+ *
+ * @author Ananya Seetharaman
+ * @version April 10, 2022
+ */
 public class Student extends Account {
     public ArrayList<String> quizGrades = new ArrayList<>();
     public ArrayList<String> quizNames = new ArrayList<>();

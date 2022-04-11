@@ -4,6 +4,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Teacher
+ * An implementation of account that has an additional method allowing teachers to see a student's grades
+ *
+ * @author Ananya Seetharaman
+ * @version April 10, 2022
+ */
+
 public class Teacher extends Account {
 
         public Teacher(String username, String password, String userType) {
