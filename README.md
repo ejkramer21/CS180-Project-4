@@ -1,4 +1,5 @@
 # CS180-Project-4: Learning Management System
+Option 2
 Ananya Seetharaman, Erin Joy Kramer, Alex Lam, James Kor
 
 Ananya Seetharman- Submitted Report on Brightspace
