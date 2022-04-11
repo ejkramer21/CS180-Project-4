@@ -1,5 +1,7 @@
 import java.io.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 
 public class Student extends Account {
     private ArrayList<String> quizGrades;
@@ -66,7 +68,7 @@ public class Student extends Account {
             File f1 = new File((getUsername() + ".txt"));
             FileWriter fr1 = new FileWriter(f1, true);
             BufferedWriter bfw = new BufferedWriter(fr1);
-            bfw.write(("\n" + quizName + ".txt\n"));
+            bfw.write(("\n" + quizName + "\n"));
             for (int i = 0; i < questionGrade.length; i++) {
                 bfw.write("Q" + (i + 1) + ". " + questionGrade[i] + "/" + questionValue[i] + " ");
                 totalPoints += questionValue[i];
@@ -77,6 +79,9 @@ public class Student extends Account {
             for (int i = 0; i < questionGrade.length; i++) {
                 bfw.write("Q" + (i+1) + ". " + studentAnswers[i] + " ");
             }
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime timeStamp = LocalDateTime.now();
+            bfw.write("\n" + dtf.format(timeStamp));
             bfw.close();
         } catch (IOException e) {
             throw new InvalidAccountException("Something went wrong!");

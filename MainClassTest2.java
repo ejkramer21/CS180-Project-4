@@ -398,12 +398,26 @@ public class MainClassTest2 {
 
                                 //DO NOT TOUCH THIS WORKS
                                 if (teacherInput == 1) {
-                                    //menu for creating quiz
-                                    System.out.println("Write the quiz name");
-                                    String quizName = scan.nextLine();
-                                    Quiz studentQuiz = new Quiz(userType, quizName, password, username);
-                                    studentQuiz.addQuiz(quizName + ".txt");
-                                    System.out.println("Quiz successfully added");
+                                    System.out.println("How do you want to create the quiz? \nUpload a File: 1, Manually Input: 2");
+                                    int autoOrManual = scan.nextInt();
+                                    while (!(autoOrManual == 1 || autoOrManual == 2)) {
+                                        System.out.println("That's not a choice! Make " +
+                                                "sure you choose a menu option from 1-2.");
+                                        autoOrManual = scan.nextInt();
+                                    }
+                                    scan.nextLine();
+                                    if(autoOrManual == 1){
+                                        System.out.println("Enter in the quiz file: ");
+                                        String importedQuizFilename = scan.nextLine();
+                                        //importing a file without network io
+                                    } else if(autoOrManual == 2) {
+                                        //menu for creating quiz
+                                        System.out.println("Write the quiz name");
+                                        String quizName = scan.nextLine();
+                                        Quiz studentQuiz = new Quiz(userType, quizName, password, username);
+                                        studentQuiz.addQuiz(quizName + ".txt");
+                                        System.out.println("Quiz successfully added");
+                                    }
 
                                     //DO NOT TOUCH THIS WORKS
                                 } else if (teacherInput == 2) {
@@ -498,11 +512,12 @@ public class MainClassTest2 {
                                     } else {
                                         boolean quizExists = false;
                                         String line = "";
-                                        System.out.println("Input the quiz file that you want to see the grade of:");
+                                        System.out.println("Input the quiz name that you want to see the grade of:");
                                         String quiz = scan.nextLine() + ".txt";
                                         while((line = bfr2.readLine()) != null){
                                             if(line.equals(quiz)){
                                                 System.out.println(line);
+                                                System.out.println(bfr2.readLine());
                                                 System.out.println(bfr2.readLine());
                                                 System.out.println(bfr2.readLine());
                                                 System.out.println(bfr2.readLine());
@@ -692,123 +707,4 @@ public class MainClassTest2 {
         System.out.println("Thank you for using Quiz Maker!");
 
     }
-
-
-    /*int counter = 0;
-        String fileLine;
-        private static final String studentInputs = "View grades : 1, Take quiz : 2";
-        private static final String teacherInputs = "Create quiz : 1, edit quiz : 2, delete quiz : 3, view student submissions : 4";
-        private static final String takeQuizPrompt = "How would you like to take the quiz?";
-        private static final String takeQuizMenu = "Manually : 1, Upload : 2";
-        System.out.println("Type your username");
-        String username = scan.nextLine();
-        File f = new File(username + ".txt");
-        System.out.println("Type your password");
-        String password = scan.nextLine();
-        try {
-            String userType = "";
-            boolean passwordCorrect = true;
-            BufferedReader bfr = new BufferedReader(new FileReader(f));
-            int teacherOption;
-            int studentOption;
-            int quizOption;
-            //while loop to check if password is correct and the same (might need to check this when testing)
-            while ((fileLine = bfr.readLine()) != null) {
-                counter++;
-                if (counter == 2) {
-                    if (!password.equals(fileLine)) {
-                        passwordCorrect = false;
-                    }
-                } else if (counter == 3) {
-                    userType = fileLine;
-                    //1 is student, 2 teacher
-                }
-            }
-            //if password is not correct, then statement prints and leaves loop
-            if (passwordCorrect == false) {
-                System.out.println("Error, password incorrect!");
-            }
-            //if statements for student or teacher
-            //if it is a student (1), code below runs
-            if (Integer.parseInt(userType) == 1) {
-                //do this when input is not 1 and 2
-                do {
-                    //get input of the student
-                    System.out.println(studentInputs);
-                    studentOption = scan.nextInt();
-                    scan.nextLine();
-                    //if input is 1, will show grades (function told me by Ananya)
-                    //else if input is 2, ask if user
-                    if (studentOption == 1) {
-                        Student.readGrades();
-                    } else if (studentOption == 2) {
-                        System.out.println(takeQuizPrompt);
-                        do {
-                            System.out.println(takeQuizMenu);
-                            quizOption = scan.nextInt();
-                            scan.nextLine();
-                            if (quizOption == 1) {
-                                //code to take quiz manually
-                            } else if (quizOption == 2) {
-                                //code to upload quiz
-                            } else {
-                                System.out.println("Error, option does not work, reselect");
-                            }
-                        } while (quizOption != 1 && quizOption != 2);
-                        //run quiz that they desire
-                    } else {
-                        System.out.println("Error, option does not work, reselect");
-                    }
-                } while (studentOption != 1 && studentOption != 2);
-            } else {
-                do {
-                    System.out.println(teacherInputs);
-                    teacherOption = scan.nextInt();
-                    scan.nextLine();
-                    if (teacherOption == 1) {
-                        //create quiz call function
-                    } else if (teacherOption == 2) {
-                        //edit quiz call function
-                    } else if (teacherOption == 3) {
-                        //delete quiz call function
-                    } else if (teacherOption == 4) {
-                        view student submission call function;
-                    } else {
-                        System.out.println("Error, option does not work, reselect");
-                    }
-                } while (teacherOption < 1 || teacherOption > 4);
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("This account is not in our system");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
-    /*
-        Code to input question and options
-        String question = "";
-        String optionOne = "";
-        String optionTwo = "";
-        String optionThree = "";
-        String optionFour = "";
-        System.out.println("Please enter your question");
-        question = scan.nextLine();
-        for (int i = 1; i < 5; i++) {
-            System.out.printf("Please enter option %f: \n", i);
-            if (i == 1) {
-                optionOne == scan.nextLine();
-            } else if (i == 2) {
-                optionTwo == scan.nextLine();
-            } else if (i == 3) {
-                optionThree == scan.nextLine();
-            } else {
-                optionFour == scan.nextLine();
-            }
-          }
-          //define method and call method
-        }
-     */
 }
