@@ -1,6 +1,14 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+/**
+ * MainClass
+ * this class calls upon the other classes in order to provide the user experience; user input is also entered
+ * here
+ * 
+ * @author Alex Lam
+ * @version April 10, 2022
+ */
 
 public class MainClassTest2 {
 
