@@ -405,7 +405,8 @@ public class MainClassTest {
                                             //FIXME This doesn't work
                                         } else if (addOrDelete == 3) {
                                             Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
-                                            quiz.randomize();
+                                            quiz.readQuiz(quizName + ".txt");
+                                            quiz.randomize(quizName + ".txt");
                                     } else {
                                             System.out.println("That wasn't an option");
                                         }

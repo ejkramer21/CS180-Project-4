@@ -3,6 +3,8 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+//I added some getters and setters -Joy
+
 public class Account {
     private String password;
     private String username;
@@ -22,16 +24,28 @@ public class Account {
     }
 
     public String getUserType() {
-        return this.userType;
+        return userType;
     }
 
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
-    public String getPassword(){
-        return this.password;
+    public void accountsArrayListAfterReset() throws FileNotFoundException {
+        try {
+            File f = new File("Accounts.txt");
+            f.createNewFile();
+            BufferedReader bfr = new BufferedReader(new FileReader(f));
+            String line = "";
+            while((line = bfr.readLine()) != null){
+                String[] accountArray = line.split(",");
+                accounts.add(accountArray);
+            }
+        } catch (IOException e){
+            throw new FileNotFoundException("No accounts have been made, accounts.txt does not exist.");
+        }
     }
+
     public void createAccount(String username,
                               String password,
                               String userType) throws FileNotFoundException {
@@ -43,39 +57,6 @@ public class Account {
         pw.close();
     }
 
-    public void deleteAccount(String username,
-                              String password, String userType)
-            throws IOException, InvalidAccountException {
-        File f = new File("Accounts.txt");
-        FileReader fr = new FileReader(f);
-        BufferedReader bfr = new BufferedReader(fr);
-        int counter = 0;
-        String accountLine = bfr.readLine();
-        boolean accountExists = false;
-        while (!(accountLine == null)) {
-            String[] userInfo = accountLine.split(",");
-            if (userInfo[0].equals(username) &&
-                    userInfo[1].equals(password) &&
-                    userInfo[2].equals(userType)) {
-                accountExists = true;
-                accounts.remove(counter);
-                break;
-            }
-            accountLine = bfr.readLine();
-            counter++;
-        }
-        if (accountExists == false){
-            //I add a message string because it was giving an error.  Feel free to change it -Joy
-            throw new InvalidAccountException("This account doesn't exist!");
-        }
-        FileOutputStream fos = new FileOutputStream("Accounts.txt", false);
-        PrintWriter pw = new PrintWriter(fos);
-        for (int i = 0; i < accounts.size(); i++) {
-            pw.println(accounts.get(i)[0] + "," +
-                    accounts.get(i)[1] + "," + accounts.get(i)[2]);
-        }
-        pw.close();
-    }
 
     public void editAccount(String originalUser, String newUser,
                             String newPassword, String diffUser)
@@ -97,33 +78,21 @@ public class Account {
     }
 
     public void sortIdentity() {
+        students = new ArrayList<String[]>();
+        teachers = new ArrayList<String[]>();
         for (String[] account : this.accounts) {
             if (account[2].equals("1")) {
-                this.students.add(account);
+                students.add(account);
             } else {
-                this.teachers.add(account);
+                teachers.add(account);
             }
         }
     }
 
-    public void accountsArrayListAfterReset() throws FileNotFoundException {
-        try {
-            File f = new File("Accounts.txt");
-            BufferedReader bfr = new BufferedReader(new FileReader(f));
-            String line = "";
-            while((line = bfr.readLine()) != null){
-                String[] accountArray = line.split(",");
-                accounts.add(accountArray);
-            }
-        } catch (IOException e){
-            throw new FileNotFoundException("No accounts have been made, accounts.txt does not exist.");
-        }
-    }
-
-    /*public static void main(String[] args) throws IOException, InvalidAccountException {
+    public static void main(String[] args) throws IOException, InvalidAccountException {
         Account yes = new Account("user", "pass", "1");
         yes.createAccount("user", "pass", "1");
         yes.editAccount("user", "u","pass", "1");
         //yes.deleteAccount("user", "pass", "1");
-    }*/
+    }
 }

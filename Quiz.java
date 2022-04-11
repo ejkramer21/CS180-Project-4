@@ -34,6 +34,8 @@ public class Quiz {
         Account account = new Account(username, password, userType);
         this.userType = account.getUserType();
         this.filename = filename;
+        this.allQuizQuestions = new ArrayList<String>();
+        this.randomizedQuizQuestions = new ArrayList<String>();
     }
 
     public ArrayList<Integer> getPossiblePointValues() {
@@ -117,7 +119,7 @@ public class Quiz {
         }
     }
 
-    public void randomize() {
+    public void randomize(String filename) throws FileNotFoundException {
         int questionCount = this.allQuizQuestions.size();
         ArrayList<String> tempArray = this.allQuizQuestions;
         while (questionCount != 0) {
@@ -126,6 +128,13 @@ public class Quiz {
             tempArray.remove(randomQuestionNumber);
             questionCount--;
         }
+        File f = new File(filename);
+        FileOutputStream fos = new FileOutputStream(f, false);
+        PrintWriter pw = new PrintWriter(fos);
+        for (int i =0; i < randomizedQuizQuestions.size(); i ++) {
+            pw.println(randomizedQuizQuestions.get(i));
+        }
+        pw.close();
     }
 
     public void addQuestion(String userType, String actualQuestion, String optionOne, String optionTwo, String optionThree, String optionFour, int pointValue, int answer) throws IncorrectAccountException {
@@ -219,7 +228,6 @@ public class Quiz {
                 this.allQuizQuestions.add(individualQuestion);
                 individualQuestion = "";
                 counter = 0;
-                bfr.readLine();
             } else {
                 individualQuestion = individualQuestion + line + "\n";
             }
