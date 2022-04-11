@@ -15,7 +15,8 @@ Student.java - a method that extends Account, allowing for a student's grades to
 
 Teacher.java - a method that extends Account, allowing a teacher to look at any student's grades
 
+Question.java - an object class that is used by Quiz, with constructor, getters, and setters.
 
-
+Quiz.java - a method that handles the creation, deletion, alteration, taking, and grading of quizzes
 
 
