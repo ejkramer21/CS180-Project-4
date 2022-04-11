@@ -2,7 +2,14 @@ import java.io.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
-
+/**
+ * Student
+ * An implementation of account that allows for the retrieval and addition of grades for the student. Also
+ * allows the file containing the student's grades to be deleted.
+ *
+ * @author Ananya Seetharaman
+ * @version April 10, 2022
+ */
 public class Student extends Account {
     private ArrayList<String> quizGrades;
     private ArrayList<String> quizNames;
