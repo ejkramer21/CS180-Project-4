@@ -194,21 +194,17 @@ public class MainClassTest2 {
                                         if (!f1.exists()) {
                                             System.out.println("It looks like you may have mistyped the quiz name");
                                         } else {
-                                            //TODO Finish this
-                                            int pointsEarned = 0;
-                                            int pointsPossible = 0;
-                                            Quiz quiz = new Quiz("Student", filename, password, username);
-                                            int numQuestions = quiz.numberQuestions(filename);
-                                            String[] grades = new String[numQuestions + 1];
-                                            for (int i = 0; i < numQuestions; i++) {
-                                                //FIXME this is not based on the individual question, but on the entire quiz
-
-                                                grades[i] = i + ". " + quiz.getPointsEarned().get(i) + "/" + quiz.getPossiblePointValues().get(i);
-                                                //TODO I want the last line to be the total points earned/total possible points
-                                                pointsEarned += quiz.getPointsEarned().get(i);
-                                                pointsPossible += quiz.getPossiblePointValues().get(i);
+                                            File userFile = new File(username + ".txt");
+                                            BufferedReader readFile = new BufferedReader(new FileReader(userFile));
+                                            String line = "";
+                                            ArrayList<String> userInfo = new ArrayList<>();
+                                            while ((line = readFile.readLine()) != null) {
+                                                userInfo.add(line);
                                             }
-                                            grades[numQuestions] = pointsEarned + "/" + pointsPossible;
+                                            int indexOfQuizInAccount = userInfo.indexOf(filename + ".txt");
+                                            System.out.println(userInfo.get(indexOfQuizInAccount));
+                                            System.out.println(userInfo.get(indexOfQuizInAccount + 1));
+                                            System.out.println(userInfo.get(indexOfQuizInAccount + 2));
                                         }
                                     } catch (Exception e) {
                                         e.printStackTrace();
@@ -231,7 +227,11 @@ public class MainClassTest2 {
                                         ArrayList<Integer> correctAnswers = new ArrayList<>();
                                         ArrayList<Integer> possiblePoints = new ArrayList<>();
                                         ArrayList<Integer> pointsAccumulated = new ArrayList<>();
+                                        ArrayList<Integer> answers = new ArrayList<>();
                                         if (decision == 1) {
+                                            int[] pointsPossible = new int[10];
+                                            int[] earnedPoints = new int[10];
+                                            int[] studentAnswers = new int[10];
                                             while ((line = bfrQuiz.readLine()) != null) {
                                                 counter = 0;
                                                 int j = 0;
@@ -257,6 +257,7 @@ public class MainClassTest2 {
                                                     } else if (i == 6) {
                                                         //This is the answer line
                                                         answer = scan.nextInt();
+                                                        answers.add(answer);
                                                         scan.nextLine();
                                                         if (answer == Integer.parseInt(line)) {
                                                             pointsAccumulated.add(pointValue);
@@ -265,30 +266,34 @@ public class MainClassTest2 {
                                                         }
                                                     }
                                                 }
-                                                int[] pointsPossible = new int[possiblePoints.size()];
-                                                int[] earnedPoints = new int[pointsAccumulated.size()];
+                                                pointsPossible = new int[possiblePoints.size()];
+                                                earnedPoints = new int[pointsAccumulated.size()];
+                                                studentAnswers = new int[answers.size()];
                                                 for (int i = 0; i < possiblePoints.size(); i++) {
                                                     pointsPossible[i] = possiblePoints.get(i);
                                                 }
                                                 for (int i = 0; i < pointsAccumulated.size(); i++) {
                                                     earnedPoints[i] = pointsAccumulated.get(i);
                                                 }
-                                                Student student = new Student(username, password, userType);
-                                                student.addGrade(quizNameFile + ".txt", pointsPossible, earnedPoints);
+                                                for (int i = 0; i < answers.size(); i++) {
+                                                    studentAnswers[i] = answers.get(i);
+                                                }
                                             }
+                                            Student student = new Student(username, password, userType);
+                                            student.addGrade(quizNameFile + ".txt", pointsPossible, earnedPoints,studentAnswers);
                                         } else if (decision == 2) {
                                             String studentAnswer = "";
                                             while ((line = bfr.readLine()) != null) {
                                                 counter = 0;
                                                 for (int i = 0; i < 7; i++) {
-                                                    counter++;
-                                                    if (counter != 6 && counter != 7) {
+                                                    if (i < 5) {
                                                         System.out.println(line);
                                                     }
-                                                    if (counter == 7) {
-                                                        correctAnswers.add(Integer.parseInt(line));
-                                                    }
                                                     if (counter == 6) {
+                                                        correctAnswers.add(Integer.parseInt(line));
+                                                        answers.add(Integer.parseInt(line));
+                                                    }
+                                                    if (counter == 5) {
                                                         possiblePoints.add(Integer.parseInt(line));
                                                     }
                                                 }
@@ -315,14 +320,18 @@ public class MainClassTest2 {
                                             }
                                             int[] pointsPossible = new int[possiblePoints.size()];
                                             int[] pointEarned = new int[pointsAccumulated.size()];
+                                            int[] studentAnswers = new int[answers.size()];
                                             for (int i =0; i < possiblePoints.size(); i++) {
                                                 pointsPossible[i] = possiblePoints.get(i);
                                             }
                                             for (int i = 0; i < pointsAccumulated.size(); i++) {
                                                 pointEarned[i] = pointsAccumulated.get(i);
                                             }
+                                            for (int i = 0; i < answers.size(); i++) {
+                                                studentAnswers[i] = answers.get(i);
+                                            }
                                             Student student = new Student(username,password,userType);
-                                            student.addGrade(quizNameFile,pointsPossible, pointEarned);
+                                            student.addGrade(quizNameFile,pointsPossible, pointEarned, studentAnswers);
                                         } else {
                                             System.out.println("That wasn't an option!");
                                         }
@@ -417,14 +426,14 @@ public class MainClassTest2 {
                                         Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
                                         quiz.addQuestion(userType, question, optionOne, optionTwo, optionThree, optionFour, pointValue, answer);
 
-                                        //FIXME I need help with this one!!!!
+                                        //THIS WORKS
                                     } else if (addOrDelete == 2) {
                                         System.out.println("What is the question? (type out question, not number)");
                                         String question = scan.nextLine();
                                         Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
                                         quiz.deleteQuestion(question, quizName + ".txt");
 
-                                        //FIXME This doesn't work
+                                        //THIS WORKS
                                     } else if (addOrDelete == 3) {
                                         Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
                                         quiz.readQuiz(quizName + ".txt");

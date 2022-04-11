@@ -1,17 +1,10 @@
 import java.io.*;
 import java.util.ArrayList;
-/**
- * Student
- * An implementation of account that allows for the retrieval and addition of grades for the student. Also
- * allows the file containing the student's grades to be deleted.
- *
- * @author Ananya Seetharaman
- * @version April 10, 2022
- */
+
 public class Student extends Account {
-    public ArrayList<String> quizGrades = new ArrayList<>();
-    public ArrayList<String> quizNames = new ArrayList<>();
-    public ArrayList<String> quizTotal = new ArrayList<>();
+    private ArrayList<String> quizGrades;
+    private ArrayList<String> quizNames;
+    private ArrayList<String> quizTotal;
 
     public Student(String username, String password, String userType) {
         //I added the password and userType to work with the constructor of Account
@@ -20,14 +13,17 @@ public class Student extends Account {
         //and you can call account.getUserName() below
         //-Joy
         super(username, password, userType);
+        this.quizGrades = new ArrayList<>();
+        this.quizNames = new ArrayList<>();
+        this.quizTotal = new ArrayList<>();
     }
 
     /*
-        I think readGrades should work fine.
+        disclaimer: readGrades is not updated.
      */
-    public boolean readGrades() throws NoGradesFoundException {
+    public boolean readGrades(String username) throws NoGradesFoundException {
         try {
-            File f1 = new File((getUsername() + ".txt"));
+            File f1 = new File((username + ".txt"));
             FileReader fr1 = new FileReader(f1);
             BufferedReader bfr = new BufferedReader(fr1);
             String tempLine;
@@ -61,9 +57,8 @@ public class Student extends Account {
         questionValue is an int array of the question point values
         questionGrade is an int array of the points the student earns on each question
         It will throw an exception if it fails.
-
     */
-    public void addGrade(String quizName, int[] questionValue, int[] questionGrade) throws InvalidAccountException {
+    public void addGrade(String quizName, int[] questionValue, int[] questionGrade, int[] studentAnswers) throws InvalidAccountException {
         int totalPoints = 0;
         int totalGrade = 0;
         double finalGrade;
@@ -73,21 +68,18 @@ public class Student extends Account {
             BufferedWriter bfw = new BufferedWriter(fr1);
             bfw.write((quizName + "\n"));
             for (int i = 0; i < questionGrade.length; i++) {
-                bfw.write(questionValue[i] + "," + questionGrade[i]);
+                bfw.write("Q" + (i + 1) + ". " + questionGrade[i] + "/" + questionValue[i] + " ");
                 totalPoints += questionValue[i];
                 totalGrade += questionGrade[i];
+                bfw.write("Student answered: \n" + "Q" + (i+1) + ". " + studentAnswers[i] + " ");
             }
-            finalGrade = (double) totalGrade / (double) totalPoints;
+            finalGrade = 100 * (((double) totalGrade)/ ((double) totalPoints));
             bfw.write("\n" + String.format("%.2f", finalGrade) + "\n");
             bfw.close();
         } catch (IOException e) {
-            throw new InvalidAccountException("Something went wrong! Grades failed to update.");
+            throw new InvalidAccountException("Something went wrong!");
         }
     }
 
-    public void deleteGrades() {
-        File f = new File((getUsername() + ".txt"));
-        f.delete();
-    }
 
 }
