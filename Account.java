@@ -2,7 +2,13 @@ import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-
+/**
+ * Account
+ * An account object and management system. Allows for the creation, deletion, and editing of accounts.
+ *
+ * @author James Kor
+ * @version April 10, 2022
+ */
 //I added some getters and setters -Joy
 
 public class Account {
