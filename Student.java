@@ -16,7 +16,8 @@ public class Student extends Account {
     }
 
     /*
-        disclaimer: readGrades is not updated.
+        readGrades is updated.
+        student.readGrades() will print them all to the console.
      */
     public boolean readGrades() throws NoGradesFoundException {
         try {
