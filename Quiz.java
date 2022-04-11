@@ -2,10 +2,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-//for Ananya:  I think we should create the points earned array inside of the main method where we are actually scanning in the
-//students answers and comparing it to the next line in the file (because remember the 6th line of the questions is going to just
-//be the answer as an int, so if the student's answer == the next line, then we can call quiz.setPointsEarned(quiz.getPointsEarned.add(question.getPointValue))
-//else we do nothing.  I just think this would be easier than trying to work around the scanner input. Lmk your thoughts -Joy
+/**
+ * Quiz
+ * A class that allows for the construction and taking of quizzes. Students may take quizzes and instructors may create them.
+ *
+ * @author Erin Joy Kramer
+ * @version April 10, 2022
+ */
 
 public class Quiz {
     private String userType;
