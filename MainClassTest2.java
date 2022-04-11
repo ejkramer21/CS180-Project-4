@@ -56,85 +56,85 @@ public class MainClassTest2 {
                 }
                 scan.nextLine();
 
-                    if (personInput == 1) {
+                if (personInput == 1) {
 
-                        //student
+                    //student
 
-                        System.out.println("What will be your username?");
-                        String username = scan.nextLine();
-                        System.out.println("Set your password");
-                        String password = scan.nextLine();
+                    System.out.println("What will be your username?");
+                    String username = scan.nextLine();
+                    System.out.println("Set your password");
+                    String password = scan.nextLine();
 
-                        //Checking for account and then creating if doesn't exist
+                    //Checking for account and then creating if doesn't exist
                         /* Example LittleSuzy.txt
                                     LittleSuzy
                                     pinkPrincess47
                                     1 (or 2)
                         */
-                        try {
-                            //if(isAlphanumeric(username))
-                            File f = new File(username + ".txt");
-                            if (f.exists()) {
-                                System.out.println("This account already exists");
-                            } else {
-                                f.createNewFile();
-                                //FileOutputStream fos = new FileOutputStream(f, false);
-                                PrintWriter pw = new PrintWriter(f);
-                                pw.println(username);
-                                pw.println(password);
-                                pw.println("1");
-                                pw.close();
+                    try {
+                        //if(isAlphanumeric(username))
+                        File f = new File(username + ".txt");
+                        if (f.exists()) {
+                            System.out.println("This account already exists");
+                        } else {
+                            f.createNewFile();
+                            //FileOutputStream fos = new FileOutputStream(f, false);
+                            PrintWriter pw = new PrintWriter(f);
+                            pw.println(username);
+                            pw.println(password);
+                            pw.println("1");
+                            pw.close();
 
-                                Account studentAccount = new Account(username, password, "1");
-                                studentAccount.accountsArrayListAfterReset();
-                                studentAccount.createAccount(username, password, "1");
-                                studentAccount.sortIdentity();
-                                Student student = new Student(username, password, "Student");
-                                //call student function, has not been done
-                                System.out.println("Account Created!");
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            Account studentAccount = new Account(username, password, "1");
+                            studentAccount.accountsArrayListAfterReset();
+                            studentAccount.createAccount(username, password, "1");
+                            studentAccount.sortIdentity();
+                            Student student = new Student(username, password, "Student");
+                            //call student function, has not been done
+                            System.out.println("Account Created!");
                         }
-                    } else if (personInput == 2) {
-
-                        //teacher
-
-                        System.out.println("What will be your username?");
-                        String username = scan.nextLine();
-                        System.out.println("Set your password");
-                        String password = scan.nextLine();
-
-                        //Checking if account already exists
-                        try {
-                            File f = new File(username + ".txt");
-                            if (f.exists()) {
-                                System.out.println("This account already exists");
-                            } else {
-                                f.createNewFile();
-                                PrintWriter pw = new PrintWriter(f);
-                                pw.println(username);
-                                pw.println(password);
-                                pw.println("2");
-                                pw.close();
-                                Account studentAccount = new Account(username, password, "2");
-                                studentAccount.accountsArrayListAfterReset();
-                                studentAccount.createAccount(username, password, "2");
-                                studentAccount.sortIdentity();
-
-                                Teacher teacher = new Teacher(username, password, "2");
-                                //call teacher function, has not been done
-                                System.out.println("Account Created!");
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                } else if (personInput == 2) {
+
+                    //teacher
+
+                    System.out.println("What will be your username?");
+                    String username = scan.nextLine();
+                    System.out.println("Set your password");
+                    String password = scan.nextLine();
+
+                    //Checking if account already exists
+                    try {
+                        File f = new File(username + ".txt");
+                        if (f.exists()) {
+                            System.out.println("This account already exists");
+                        } else {
+                            f.createNewFile();
+                            PrintWriter pw = new PrintWriter(f);
+                            pw.println(username);
+                            pw.println(password);
+                            pw.println("2");
+                            pw.close();
+                            Account studentAccount = new Account(username, password, "2");
+                            studentAccount.accountsArrayListAfterReset();
+                            studentAccount.createAccount(username, password, "2");
+                            studentAccount.sortIdentity();
+
+                            Teacher teacher = new Teacher(username, password, "2");
+                            //call teacher function, has not been done
+                            System.out.println("Account Created!");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
 
             } else if (accountInput == 2) {
 
@@ -294,18 +294,20 @@ public class MainClassTest2 {
                                             student.addGrade(quizNameFile + ".txt", pointsPossible, earnedPoints,studentAnswers);
                                         } else if (decision == 2) {
                                             String studentAnswer = "";
-                                            while ((line = bfr.readLine()) != null) {
+                                            while ((line = bfrQuiz.readLine()) != null) {
                                                 counter = 0;
                                                 for (int i = 0; i < 7; i++) {
                                                     if (i < 5) {
                                                         System.out.println(line);
+                                                        line = bfrQuiz.readLine();
                                                     }
-                                                    if (counter == 6) {
+                                                    if (i == 6) {
                                                         correctAnswers.add(Integer.parseInt(line));
                                                         answers.add(Integer.parseInt(line));
                                                     }
-                                                    if (counter == 5) {
+                                                    if (i == 5) {
                                                         possiblePoints.add(Integer.parseInt(line));
+                                                        line = bfrQuiz.readLine();
                                                     }
                                                 }
                                             }
@@ -673,15 +675,15 @@ public class MainClassTest2 {
             }
 
 
-                System.out.println("Would you like to do something else?");
-                System.out.println("1. Yes\n2. No");
-                somethingElse = scan.nextInt();
-                while (!(somethingElse == 1 || somethingElse == 2)) {
-                    System.out.println("That's not a choice! Make " +
+            System.out.println("Would you like to do something else?");
+            System.out.println("1. Yes\n2. No");
+            somethingElse = scan.nextInt();
+            while (!(somethingElse == 1 || somethingElse == 2)) {
+                System.out.println("That's not a choice! Make " +
                         "sure you choose either 1 for yes or 2 for no.");
-                    somethingElse = scan.nextInt();
-                }
-                scan.nextLine();
+                somethingElse = scan.nextInt();
+            }
+            scan.nextLine();
 
 
 
