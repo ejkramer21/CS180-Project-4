@@ -66,15 +66,17 @@ public class Student extends Account {
             File f1 = new File((getUsername() + ".txt"));
             FileWriter fr1 = new FileWriter(f1, true);
             BufferedWriter bfw = new BufferedWriter(fr1);
-            bfw.write((quizName + "\n"));
+            bfw.write(("\n" + quizName + ".txt\n"));
             for (int i = 0; i < questionGrade.length; i++) {
                 bfw.write("Q" + (i + 1) + ". " + questionGrade[i] + "/" + questionValue[i] + " ");
                 totalPoints += questionValue[i];
                 totalGrade += questionGrade[i];
-                bfw.write("Q" + (i+1) + ". " + studentAnswers[i] + " ");
             }
             finalGrade = 100 * (((double) totalGrade)/ ((double) totalPoints));
             bfw.write("\n" + String.format("%.2f", finalGrade) + "\n");
+            for (int i = 0; i < questionGrade.length; i++) {
+                bfw.write("Q" + (i+1) + ". " + studentAnswers[i] + " ");
+            }
             bfw.close();
         } catch (IOException e) {
             throw new InvalidAccountException("Something went wrong!");
