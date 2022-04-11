@@ -414,6 +414,19 @@ public class MainClassTest {
 
                                 } else if (teacherInput == 3) {
                                     //function to delete quiz, prompt if they want to
+                                    System.out.println("Which quiz do you wish to delete?");
+                                    String filename = scan.nextLine() + ".txt";
+                                    System.out.println("Are you sure?\n1.Yes\n2.No");
+                                    int yesOrNo = scan.nextInt();
+                                    scan.nextLine();
+                                    if (yesOrNo == 1) {
+                                        Quiz quiz = new Quiz(userType, filename, password, username);
+                                        quiz.deleteQuiz(filename);
+                                    } else if (yesOrNo == 2) {
+                                        System.out.println("No worries");
+                                    } else {
+                                        System.out.println("That wasn't an option");
+                                    }
                                 } else {
                                     //function to view student submission (name wanted)
                                 }
@@ -468,7 +481,7 @@ public class MainClassTest {
                         Account account = new Account(username, password, userType);
 
                         if (yesOrNo == 1) {
-                            account.deleteAccount(username, password, userType);
+                            account.deleteAccount(username + ".txt");
                             System.out.println("Account deleted.");
 
                         } else if (yesOrNo == 2) {

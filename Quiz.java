@@ -226,4 +226,9 @@ public class Quiz {
         }
         bfr.close();
     }
+
+    public void deleteQuiz(String filename) {
+        File f = new File(filename);
+        f.delete();
+    }
 }
