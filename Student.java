@@ -21,7 +21,7 @@ public class Student extends Account {
     }
 
     /*
-        disclaimer: readGrades is not updated.
+        disclaimer: readGrades is updated.
      */
     public boolean readGrades(String username) throws NoGradesFoundException {
         try {
@@ -77,7 +77,7 @@ public class Student extends Account {
             finalGrade = 100 * (((double) totalGrade)/ ((double) totalPoints));
             bfw.write("\n" + String.format("%.2f", finalGrade) + "\n");
             for (int i = 0; i < questionGrade.length; i++) {
-                bfw.write("Q" + (i+1) + ". " + studentAnswers[i] + " ");
+                bfw.write("Q" + (i + 1) + ". " + studentAnswers[i] + " ");
             }
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime timeStamp = LocalDateTime.now();
