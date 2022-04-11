@@ -151,8 +151,12 @@ public class Quiz {
                 pointsPossible.add(pointValue);
                 setPossiblePointValues(pointsPossible);
 
-                Question questionCall = new Question(actualQuestion, options, pointValue, answer);
-                pw.println(questionCall);
+                pw.println(actualQuestion);
+                for (int i = 0; i < 4; i++) {
+                    pw.println(options[i]);
+                }
+                pw.println(pointValue);
+                pw.println(answer);
                 pw.close();
                 fos.close();
             } catch (FileNotFoundException e) {
@@ -166,50 +170,33 @@ public class Quiz {
         }
     }
 
-    public void deleteQuestion(String userType, String actualQuestion, String filename, int answer) throws IncorrectAccountException {
+    public void deleteQuestion(String actualQuestion, String filename) throws IncorrectAccountException {
         //putting questions into an array list and finding the question from the list and delete that question and the four options
         if (userType.equalsIgnoreCase("2")) {
             String[] option = new String[4];
             int i = 0;
             String line = "";
             ArrayList<String> questionComponents = new ArrayList<>();
-            try (BufferedReader bfr = new BufferedReader(new FileReader(filename))) {
+            File f = new File(filename);
+            try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
                 while ((line = (bfr.readLine())) != null) {
                     questionComponents.add(line);
                 }
 
-                questionComponents.get(questionComponents.indexOf(actualQuestion));
-                //ngl I felt like a genius when I wrote this
-                while (i < 4) {
-                    option[i] = ++i + ". " + questionComponents.get(questionComponents.indexOf(actualQuestion) + i);
+                for (i = 0; i < 7; i++) {
+                questionComponents.remove(questionComponents.indexOf(actualQuestion) + i);
                 }
 
-                //Question questionCall = new Question(actualQuestion, option, answer);
-                while (i < 7) {
-                    //is 6 because we also have the int of answer in the file
-                    questionComponents.remove(questionComponents.indexOf(actualQuestion));
-                    i++;
-                }
 
-                File f = new File(filename);
                 //we are rewriting the entire file here
                 FileOutputStream fos = new FileOutputStream(f, false);
                 PrintWriter pw = new PrintWriter(fos);
-                pw.println(questionComponents);
+                for (i = 0; i < questionComponents.size(); i++) {
+                    pw.println(questionComponents.get(i));
+                }
                 pw.close();
                 fos.close();
 
-                //this is resetting so the questions stored in the quiz no longer includes the removed question
-                if (questionComponents.size() % 7 == 0) {
-                    String[] newOptions = new String[4];
-                    int j = 0;
-                    for (i = 0; i < questionComponents.size(); i++) {
-                        for (j = 0; j < 4; j++) {
-                            newOptions[j] = questionComponents.get(i + 1);
-                        }
-                        new Question(questionComponents.get(i), newOptions, Integer.parseInt(questionComponents.get(j + 2)), Integer.parseInt(questionComponents.get(j + 1)));
-                    }
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {

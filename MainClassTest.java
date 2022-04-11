@@ -394,10 +394,20 @@ public class MainClassTest {
                                             Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
                                             quiz.addQuestion(userType, question, optionOne, optionTwo, optionThree, optionFour, pointValue, answer);
 
+                                            //FIXME I need help with this one!!!!
                                         } else if (addOrDelete == 2) {
+                                            System.out.println("What is the question? (type out question, not number)");
+                                            String question = scan.nextLine();
+                                            Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
+                                            quiz.deleteQuestion(question, quizName + ".txt");
+                                            System.out.println("Question was successfully deleted");
 
+                                            //TODO Idk if this works
                                         } else if (addOrDelete == 3) {
-
+                                            System.out.println("Which quiz do you want to randomize?");
+                                            String filename = scan.nextLine() + ".txt";
+                                            Quiz quiz = new Quiz(userType,filename, password, username);
+                                            quiz.randomize();
                                     } else {
                                             System.out.println("That wasn't an option");
                                         }
