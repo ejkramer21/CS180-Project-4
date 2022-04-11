@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class MainClassTest {
 
     private static final String studentTeacherMenu = "Student : 1, Teacher : 2";
-    private static final String logCreateDeleteMenu = "Create : 1, Login : 2, Delete : 3, Edit : 4";
+    private static final String logCreateDeleteMenu = "Create Account: 1, Login : 2, Delete Account: 3, Edit Account: 4";
     private static final String studentInputs = "View grades : 1, Take quiz : 2";
     private static final String teacherInputs = "Create quiz : 1, edit quiz : 2, delete quiz : 3, view student submissions : 4";
     private static final String quizNameFileInput = "Enter the name of the quiz that you would like to take (exactly as listed!!)";
@@ -72,12 +72,11 @@ public class MainClassTest {
                                 f.createNewFile();
                                 //FileOutputStream fos = new FileOutputStream(f, false);
                                 PrintWriter pw = new PrintWriter(f);
-                                System.out.println(username + password + "1");
-
                                 pw.println(username);
                                 pw.println(password);
                                 pw.println("1");
                                 pw.close();
+
                                 Account studentAccount = new Account(username, password, "1");
                                 studentAccount.accountsArrayListAfterReset();
                                 studentAccount.createAccount(username, password, "1");
@@ -223,7 +222,7 @@ public class MainClassTest {
                                     if (!f3.exists()) {
                                         System.out.println("This is not in our system!");
                                     } else {
-                                        Quiz quiz = new Quiz("Student", quizNameFile, password, username);
+                                        Quiz quiz = new Quiz("1", quizNameFile, password, username);
                                         BufferedReader bfrQuiz = new BufferedReader(new FileReader(f3));
                                         System.out.println(takeQuizPrompt);
                                         System.out.println(takeQuizMenu);
@@ -258,6 +257,7 @@ public class MainClassTest {
 
                                                         }
                                                     }
+                                                    bfr.readLine();
                                                 }
                                             }
                                         } else if (decision == 2) {
@@ -402,11 +402,9 @@ public class MainClassTest {
                                             quiz.deleteQuestion(question, quizName + ".txt");
                                             System.out.println("Question was successfully deleted");
 
-                                            //TODO Idk if this works
+                                            //FIXME This doesn't work
                                         } else if (addOrDelete == 3) {
-                                            System.out.println("Which quiz do you want to randomize?");
-                                            String filename = scan.nextLine() + ".txt";
-                                            Quiz quiz = new Quiz(userType,filename, password, username);
+                                            Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
                                             quiz.randomize();
                                     } else {
                                             System.out.println("That wasn't an option");
@@ -442,6 +440,8 @@ public class MainClassTest {
                 } else {
                     System.out.println("You need to type 1 for student or 2 for teacher!");
                 }
+
+                //DO NOT CHANGE
             } else if (accountInput == 3) {
 
                 //code for delete account
@@ -467,7 +467,7 @@ public class MainClassTest {
                             userType = fileLine;
                         }
                     }
-
+                    bfr.close();
                     if (!filePassword.equals(password)) {
                         System.out.println("Incorrect Password!");
 
@@ -481,7 +481,7 @@ public class MainClassTest {
                         Account account = new Account(username, password, userType);
 
                         if (yesOrNo == 1) {
-                            account.deleteAccount(username + ".txt");
+                            f.delete();
                             System.out.println("Account deleted.");
 
                         } else if (yesOrNo == 2) {
