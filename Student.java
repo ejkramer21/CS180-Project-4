@@ -16,8 +16,7 @@ public class Student extends Account {
     }
 
     /*
-        readGrades is updated.
-        student.readGrades() will print them all to the console.
+        I think readGrades should work fine.
      */
     public boolean readGrades() throws NoGradesFoundException {
         try {
@@ -39,7 +38,6 @@ public class Student extends Account {
                 }
 
             }
-            bfr.close();
         } catch (IOException e) {
             throw new NoGradesFoundException("This student has no grades!");
         }
@@ -72,13 +70,17 @@ public class Student extends Account {
                 totalPoints += questionValue[i];
                 totalGrade += questionGrade[i];
             }
-            finalGrade = totalGrade / totalPoints;
+            finalGrade = (double) totalGrade / (double) totalPoints;
             bfw.write("\n" + String.format("%.2f", finalGrade) + "\n");
             bfw.close();
         } catch (IOException e) {
-            throw new InvalidAccountException("Something went wrong!");
+            throw new InvalidAccountException("Something went wrong! Grades failed to update.");
         }
     }
 
+    public void deleteGrades() {
+        File f = new File((getUsername() + ".txt"));
+        f.delete();
+    }
 
 }
