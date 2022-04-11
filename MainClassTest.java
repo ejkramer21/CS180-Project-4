@@ -346,15 +346,62 @@ public class MainClassTest {
                                 teacherInput = scan.nextInt();
                                 scan.nextLine();
 
+                                //DO NOT TOUCH THIS WORKS
                                 if (teacherInput == 1) {
                                     //menu for creating quiz
                                     System.out.println("Write the quiz name");
                                     String quizName = scan.nextLine();
                                     Quiz studentQuiz = new Quiz(userType, quizName, password, username);
-                                    studentQuiz.addQuiz(quizName);
+                                    studentQuiz.addQuiz(quizName + ".txt");
                                     System.out.println("Quiz successfully added");
+
+                                    //DO NOT TOUCH THIS WORKS
                                 } else if (teacherInput == 2) {
                                     //function to edit quiz or inputs needed
+                                    System.out.println("Which quiz is it?");
+                                    String quizName = scan.nextLine();
+
+                                        System.out.println("Would you like to\n1. Add a Question\n2. Delete a Question\n3. Randomize the questions");
+                                        int addOrDelete = scan.nextInt();
+                                        scan.nextLine();
+                                        if (addOrDelete == 1) {
+                                            String question = "";
+                                            String optionOne = "";
+                                            String optionTwo = "";
+                                            String optionThree = "";
+                                            String optionFour = "";
+
+                                            System.out.println("Please enter your question");
+                                            question = scan.nextLine();
+
+                                            for (int i = 1; i < 5; i++) {
+                                                System.out.println("Input option " + i);
+                                                if (i == 1) {
+                                                    optionOne = scan.nextLine();
+                                                } else if (i == 2) {
+                                                    optionTwo = scan.nextLine();
+                                                } else if (i == 3) {
+                                                    optionThree = scan.nextLine();
+                                                } else {
+                                                    optionFour = scan.nextLine();
+                                                }
+                                            }
+                                            System.out.println("Which option (1,2,3,or 4) is correct?");
+                                            int answer = Integer.parseInt(scan.nextLine());
+                                            System.out.println("How many points is the question worth?");
+                                            int pointValue = Integer.parseInt(scan.nextLine());
+                                            //define method and call method
+                                            Quiz quiz = new Quiz(userType, quizName + ".txt", password, username);
+                                            quiz.addQuestion(userType, question, optionOne, optionTwo, optionThree, optionFour, pointValue, answer);
+
+                                        } else if (addOrDelete == 2) {
+
+                                        } else if (addOrDelete == 3) {
+
+                                    } else {
+                                            System.out.println("That wasn't an option");
+                                        }
+
                                 } else if (teacherInput == 3) {
                                     //function to delete quiz, prompt if they want to
                                 } else {
