@@ -19,6 +19,8 @@ Teacher.java - a method that extends Account, allowing a teacher to look at any 
 
 Quiz.java - a method that handles the creation, deletion, alteration, taking, and grading of quizzes
 
+MainClassTest2.java - the main method that brings all the code together.  Implementation below is used in this class to bring all classes together.  Error's are written to the console if it doesn't compile properly.
+
 To implement:
 Create a student and teacher account.
 Use teacher account to create a quiz.
