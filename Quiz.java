@@ -119,23 +119,6 @@ public class Quiz {
         }
     }
 
-    public void randomize(String filename) throws FileNotFoundException {
-        int questionCount = this.allQuizQuestions.size();
-        ArrayList<String> tempArray = this.allQuizQuestions;
-        while (questionCount != 0) {
-            int randomQuestionNumber = (int) Math.random() * (questionCount - 1);
-            this.randomizedQuizQuestions.add(tempArray.get(randomQuestionNumber));
-            tempArray.remove(randomQuestionNumber);
-            questionCount--;
-        }
-        File f = new File(filename);
-        FileOutputStream fos = new FileOutputStream(f, false);
-        PrintWriter pw = new PrintWriter(fos);
-        for (int i =0; i < randomizedQuizQuestions.size(); i ++) {
-            pw.println(randomizedQuizQuestions.get(i));
-        }
-        pw.close();
-    }
 
     public void addQuestion(String userType, String actualQuestion, String optionOne, String optionTwo, String optionThree, String optionFour, int pointValue, int answer) throws IncorrectAccountException {
         //we will want to prompt the user to enter their account information before they may add a question.  I recommend a while loop so the teacher inputs their account info
@@ -187,24 +170,38 @@ public class Quiz {
             String line = "";
             ArrayList<String> questionComponents = new ArrayList<>();
             File f = new File(filename);
+            int location = 0;
             try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
                 while ((line = (bfr.readLine())) != null) {
                     questionComponents.add(line);
                 }
 
-                for (i = 0; i < 7; i++) {
-                questionComponents.remove(questionComponents.indexOf(actualQuestion) + i);
-                }
-
-
-                //we are rewriting the entire file here
                 FileOutputStream fos = new FileOutputStream(f, false);
                 PrintWriter pw = new PrintWriter(fos);
-                for (i = 0; i < questionComponents.size(); i++) {
-                    pw.println(questionComponents.get(i));
+
+                if (questionComponents.contains(actualQuestion)) {
+                    location = questionComponents.indexOf(actualQuestion);
+                    for (i = 0; i < 7; i++) {
+                        questionComponents.remove(location);
+                    }
+                    //we are rewriting the entire file here
+
+                    for (i = 0; i < questionComponents.size(); i++) {
+                        pw.println(questionComponents.get(i));
+                    }
+                    System.out.println("Question was successfully deleted");
+                } else {
+
+                    for (i = 0; i < questionComponents.size(); i++) {
+                        pw.println(questionComponents.get(i));
+                    }
+
+                    System.out.println("Error, question does not exist");
                 }
+
                 pw.close();
                 fos.close();
+
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -225,6 +222,7 @@ public class Quiz {
         while ((line = bfr.readLine()) != null) {
             counter++;
             if (counter % 7 == 0) {
+                individualQuestion = individualQuestion + line + "\n";
                 this.allQuizQuestions.add(individualQuestion);
                 individualQuestion = "";
                 counter = 0;
@@ -233,6 +231,24 @@ public class Quiz {
             }
         }
         bfr.close();
+    }
+
+    public void randomize(String filename) throws FileNotFoundException {
+        int questionCount = this.allQuizQuestions.size();
+        ArrayList<String> tempArray = this.allQuizQuestions;
+        while (tempArray.size() != 0) {
+            int randomQuestionNumber = (int) (Math.random() * questionCount);
+            this.randomizedQuizQuestions.add(tempArray.get(randomQuestionNumber));
+            tempArray.remove(randomQuestionNumber);
+            questionCount--;
+        }
+        File f = new File(filename);
+        FileOutputStream fos = new FileOutputStream(f, false);
+        PrintWriter pw = new PrintWriter(fos);
+        for (int i = 0; i < randomizedQuizQuestions.size(); i++) {
+            pw.print(randomizedQuizQuestions.get(i));
+        }
+        pw.close();
     }
 
     public void deleteQuiz(String filename) {
