@@ -35,6 +35,11 @@ public class MainClassTest2 {
             System.out.println("Welcome to the Quiz program!");
             System.out.println(logCreateDeleteMenu);
             accountInput = scan.nextInt();
+            while (accountInput < 1 || accountInput > 4) {
+                System.out.println("That's not a choice! Make " +
+                        "sure you choose a menu option from 1-4.");
+                accountInput = scan.nextInt();
+            }
             scan.nextLine();
 
             //DO NOT CHANGE ANYTHING UNDER ACCOUNTINPUT == 1 !!!!!
@@ -44,9 +49,12 @@ public class MainClassTest2 {
 
                 System.out.println(studentTeacherMenu);
                 personInput = scan.nextInt();
+                while (!(personInput == 1 || personInput == 2)) {
+                    System.out.println("That's not a choice! Make " +
+                            "sure you choose either 1 for student or 2 for teacher.");
+                    personInput = scan.nextInt();
+                }
                 scan.nextLine();
-
-                do {
 
                     if (personInput == 1) {
 
@@ -126,12 +134,7 @@ public class MainClassTest2 {
                             e.printStackTrace();
                         }
 
-                    } else {
-                        System.out.println("You need to type either 1 for student or 2 for teacher!");
                     }
-
-                    //do/while protects against invalid input
-                } while (personInput != 1 && personInput != 2);
 
             } else if (accountInput == 2) {
 
@@ -139,6 +142,11 @@ public class MainClassTest2 {
 
                 System.out.println(studentTeacherMenu);
                 personInput = scan.nextInt();
+                while (!(personInput == 1 || personInput == 2)) {
+                    System.out.println("That's not a choice! Make " +
+                            "sure you choose either 1 for student or 2 for teacher.");
+                    personInput = scan.nextInt();
+                }
                 scan.nextLine();
 
                 if (personInput == 1) {
@@ -175,16 +183,14 @@ public class MainClassTest2 {
                             } else {
                                 System.out.println("You have successfully logged in");
 
-                                do {
-                                    System.out.println(studentInputs);
+                                System.out.println(studentInputs);
+                                studentInput = scan.nextInt();
+                                while (!(studentInput == 1 || studentInput == 2)) {
+                                    System.out.println("That's not a choice! Make " +
+                                            "sure you choose a menu option from 1-2.");
                                     studentInput = scan.nextInt();
-                                    scan.nextLine();
-                                    if (studentInput != 1 && studentInput != 2) {
-                                        System.out.println("Error. You need to either type 1 or 2.");
-                                    }
-
-                                } while (studentInput != 1 && studentInput != 2);
-
+                                }
+                                scan.nextLine();
                                 //get grade
                                 if (studentInput == 1) {
                                     System.out.println("Which quiz would you like to view the grades of?");
@@ -223,6 +229,11 @@ public class MainClassTest2 {
                                         System.out.println(takeQuizPrompt);
                                         System.out.println(takeQuizMenu);
                                         int decision = scan.nextInt();
+                                        while (!(decision == 1 || decision == 2)) {
+                                            System.out.println("That's not a choice! Make " +
+                                                    "sure you choose a menu option from 1-2.");
+                                            decision = scan.nextInt();
+                                        }
                                         scan.nextLine();
                                         ArrayList<Integer> correctAnswers = new ArrayList<>();
                                         ArrayList<Integer> possiblePoints = new ArrayList<>();
@@ -376,6 +387,11 @@ public class MainClassTest2 {
                                 System.out.println("You have successfully logged in");
                                 System.out.println(teacherInputs);
                                 teacherInput = scan.nextInt();
+                                while (teacherInput < 1 || teacherInput > 4) {
+                                    System.out.println("That's not a choice! Make " +
+                                            "sure you choose a menu option from 1-4.");
+                                    teacherInput = scan.nextInt();
+                                }
                                 scan.nextLine();
 
                                 //DO NOT TOUCH THIS WORKS
@@ -395,6 +411,11 @@ public class MainClassTest2 {
 
                                     System.out.println("Would you like to\n1. Add a Question\n2. Delete a Question\n3. Randomize the questions");
                                     int addOrDelete = scan.nextInt();
+                                    while (addOrDelete < 1 || addOrDelete > 4) {
+                                        System.out.println("That's not a choice! Make " +
+                                                "sure you choose a number 1-4 from the menu.");
+                                        addOrDelete = scan.nextInt();
+                                    }
                                     scan.nextLine();
                                     if (addOrDelete == 1) {
                                         String question = "";
@@ -448,6 +469,11 @@ public class MainClassTest2 {
                                     String filename = scan.nextLine() + ".txt";
                                     System.out.println("Are you sure?\n1.Yes\n2.No");
                                     int yesOrNo = scan.nextInt();
+                                    while (!(yesOrNo == 1 || yesOrNo == 2)) {
+                                        System.out.println("That's not a choice! Make " +
+                                                "sure you choose either 1 for yes or 2 for no.");
+                                        yesOrNo = scan.nextInt();
+                                    }
                                     scan.nextLine();
                                     if (yesOrNo == 1) {
                                         Quiz quiz = new Quiz(userType, filename, password, username);
@@ -457,8 +483,37 @@ public class MainClassTest2 {
                                     } else {
                                         System.out.println("That wasn't an option");
                                     }
-                                } else {
+                                } else if (teacherInput == 4){
                                     //function to view student submission (name wanted)
+
+                                    System.out.println("Input the student's username that you want to view: ");
+                                    String studentName = scan.nextLine();
+                                    File f2 = new File(studentName + ".txt");
+                                    FileReader fr2 = new FileReader(f2);
+                                    BufferedReader bfr2 = new BufferedReader(fr2);
+                                    if(!(f2.exists())){
+                                        System.out.println("This student does not exist!");
+                                    } else {
+                                        boolean quizExists = false;
+                                        String line = "";
+                                        System.out.println("Input the quiz file that you want to see the grade of:");
+                                        String quiz = scan.nextLine();
+                                        while((line = bfr2.readLine()) != null){
+                                            if(line.equals(quiz)){
+                                                System.out.println(line);
+                                                System.out.println(bfr2.readLine());
+                                                System.out.println(bfr2.readLine());
+                                                System.out.println(bfr2.readLine());
+                                                quizExists = true;
+                                                break;
+                                            }
+                                        }
+                                        if(!quizExists){
+                                            System.out.println("The quiz file does not exist!");
+                                        }
+                                    }
+
+
                                 }
                             }
                         }
@@ -509,6 +564,11 @@ public class MainClassTest2 {
                         System.out.println("Are you sure you want to delete this account?");
                         System.out.println("1. Yes\n2. No");
                         int yesOrNo = scan.nextInt();
+                        while (!(yesOrNo == 1 || yesOrNo == 2)) {
+                            System.out.println("That's not a choice! Make " +
+                                    "sure you choose either 1 for yes or 2 for no.");
+                            yesOrNo = scan.nextInt();
+                        }
                         scan.nextLine();
                         Account account = new Account(username, password, userType);
 
@@ -519,10 +579,7 @@ public class MainClassTest2 {
                         } else if (yesOrNo == 2) {
                             System.out.println("Glad to have you stay!");
 
-                        } else {
-                            System.out.println("You need to type 1 for \"Yes\" or 2 for \"No\"");
                         }
-                        //while should go here
                     }
 
                 } catch (FileNotFoundException e) {
@@ -615,15 +672,17 @@ public class MainClassTest2 {
                 System.out.println("Input Error!");
             }
 
-            do {
+
                 System.out.println("Would you like to do something else?");
                 System.out.println("1. Yes\n2. No");
                 somethingElse = scan.nextInt();
-                scan.nextLine();
-                if (somethingElse != 1 && somethingElse != 2) {
-                    System.out.println("Oops! That wasn't an option");
+                while (!(somethingElse == 1 || somethingElse == 2)) {
+                    System.out.println("That's not a choice! Make " +
+                        "sure you choose either 1 for yes or 2 for no.");
+                    somethingElse = scan.nextInt();
                 }
-            } while (somethingElse != 1 && somethingElse != 2);
+                scan.nextLine();
+
 
 
         } while (somethingElse == 1);
@@ -632,9 +691,6 @@ public class MainClassTest2 {
 
     }
 
-    public static boolean isAlphaNumeric (String input){
-        return input != null && input.matches("^[a-zA-Z0-9]*$");
-    }
 
     /*int counter = 0;
         String fileLine;
