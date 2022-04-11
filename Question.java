@@ -3,7 +3,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * Question
+ * A question object for use by the quiz class. Has a constructor, getters, and setters.
+ *
+ * @author Erin Joy Kramer
+ * @version April 11, 2022
+ */
 public class Question {
     private String question;
     private String[] option;
