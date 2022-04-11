@@ -499,7 +499,7 @@ public class MainClassTest2 {
                                         boolean quizExists = false;
                                         String line = "";
                                         System.out.println("Input the quiz file that you want to see the grade of:");
-                                        String quiz = scan.nextLine();
+                                        String quiz = scan.nextLine() + ".txt";
                                         while((line = bfr2.readLine()) != null){
                                             if(line.equals(quiz)){
                                                 System.out.println(line);
