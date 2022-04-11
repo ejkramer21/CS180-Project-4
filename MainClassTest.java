@@ -9,9 +9,13 @@ public class MainClassTest {
     private static final String studentInputs = "View grades : 1, Take quiz : 2";
     private static final String teacherInputs = "Create quiz : 1, edit quiz : 2, delete quiz : 3, view student submissions : 4";
     private static final String quizNameFileInput = "Enter the name of the quiz that you would like to take (exactly as listed!!)";
+    private static final String takeQuizPrompt = "How would you like to take the quiz?";
+    private static final String takeQuizMenu = "Manually : 1, Upload : 2";
 
     public static void main(String[] args) {
+
         //make the whole thing as a do while, keep running till user(s) are done
+
         Scanner scan = new Scanner(System.in);
 
         int accountInput;
@@ -27,15 +31,17 @@ public class MainClassTest {
 
         do {
 
-            //Inital setup
+            //Initial setup
             System.out.println("Welcome to the Quiz program!");
             System.out.println(logCreateDeleteMenu);
             accountInput = scan.nextInt();
             scan.nextLine();
 
+            //DO NOT CHANGE ANYTHING UNDER ACCOUNTINPUT == 1 !!!!!
+            //IT WORKS PERFECT
             if (accountInput == 1) {
-
                 //code to create account function
+
                 System.out.println(studentTeacherMenu);
                 personInput = scan.nextInt();
                 scan.nextLine();
@@ -55,7 +61,7 @@ public class MainClassTest {
                         /* Example LittleSuzy.txt
                                     LittleSuzy
                                     pinkPrincess47
-                                    Student
+                                    1 (or 2)
                         */
                         try {
                             //if(isAlphanumeric(username))
@@ -64,11 +70,14 @@ public class MainClassTest {
                                 System.out.println("This account already exists");
                             } else {
                                 f.createNewFile();
-                                FileOutputStream fos = new FileOutputStream(f, false);
-                                PrintWriter pw = new PrintWriter(fos);
+                                //FileOutputStream fos = new FileOutputStream(f, false);
+                                PrintWriter pw = new PrintWriter(f);
+                                System.out.println(username + password + "1");
+
                                 pw.println(username);
                                 pw.println(password);
                                 pw.println("1");
+                                pw.close();
                                 Account studentAccount = new Account(username, password, "1");
                                 studentAccount.accountsArrayListAfterReset();
                                 studentAccount.createAccount(username, password, "1");
@@ -98,11 +107,11 @@ public class MainClassTest {
                                 System.out.println("This account already exists");
                             } else {
                                 f.createNewFile();
-                                FileOutputStream fos = new FileOutputStream(f, false);
-                                PrintWriter pw = new PrintWriter(fos);
+                                PrintWriter pw = new PrintWriter(f);
                                 pw.println(username);
                                 pw.println(password);
                                 pw.println("2");
+                                pw.close();
                                 Account studentAccount = new Account(username, password, "2");
                                 studentAccount.accountsArrayListAfterReset();
                                 studentAccount.createAccount(username, password, "2");
@@ -147,99 +156,152 @@ public class MainClassTest {
                         String filePassword = "";
                         String userType = "";
                         BufferedReader bfr = new BufferedReader(new FileReader(f));
+                        counter = 0;
                         while ((fileLine = bfr.readLine()) != null) {
                             counter++;
                             if (counter == 2) {
-                                filePassword.equals(fileLine);
+                                filePassword = fileLine;
                             } else if (counter == 3) {
-                                userType.equals(fileLine);
+                                userType = fileLine;
                             }
                         }
 
                         //checking if the passwords match
-                        if (!filePassword.equals(password)) {
+                        if (!password.equals(filePassword)) {
                             System.out.println("Incorrect Password!");
 
                         } else {
-                            System.out.println("You have successfully logged in");
-
-                            do {
-                                System.out.println(studentInputs);
-                                studentInput = scan.nextInt();
-                                scan.nextLine();
-                                if (studentInput != 1 && studentInput != 2) {
-                                    System.out.println("Error. You need to either type 1 or 2.");
-                                }
-
-                            } while (studentInput != 1 && studentInput != 2);
-
-                            //get grade
-                            if (studentInput == 1) {
-                                System.out.println("Which quiz would you like to take?");
-                                String filename = scan.nextLine();
-                                try {
-                                    File f1 = new File(filename + ".txt");
-                                    if (!f1.exists()) {
-                                        System.out.println("It looks like you may have mistyped the quiz name");
-                                    } else {
-                                        //TODO Finish this
-                                        int pointsEarned = 0;
-                                        int pointsPossible = 0;
-                                        Quiz quiz = new Quiz("Student", filename, password, username);
-                                        int numQuestions = quiz.numberQuestions(filename);
-                                        String[] grades = new String[numQuestions + 1];
-                                        for (int i = 0; i < numQuestions; i++) {
-                                            //FIXME this is not based on the individual question, but on the entire quiz
-
-                                            grades[i] = i + ". " + quiz.getPointsEarned().get(i) + "/" + quiz.getPossiblePointValues().get(i);
-                                            //TODO I want the last line to be the total points earned/total possible points
-                                            pointsEarned += quiz.getPointsEarned().get(i);
-                                            pointsPossible += quiz.getPossiblePointValues().get(i);
-                                        }
-                                        grades[numQuestions] = pointsEarned + "/" + pointsPossible;
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
+                            if (!userType.equals("1")) {
+                                System.out.println("Incorrect user type");
                             } else {
-                                System.out.println(quizNameFileInput);
-                                quizNameFile = scan.nextLine();
-                                File f3 = new File(quizNameFile + ".txt");
-                                if (!f3.exists()) {
-                                    System.out.println("This is not in our system!");
-                                } else {
-                                    Quiz quiz = new Quiz("Student", quizNameFile, password, username);
-                                    BufferedReader bfrQuiz = new BufferedReader(new FileReader(f3));
-                                    String line = "";
-                                    while ((line = bfrQuiz.readLine()) != null) {
-                                        counter = 0;
-                                        int j = 0;
-                                        int answer;
-                                        String[] option = new String[4];
-                                        String question = "";
-                                        int pointValue = 0;
-                                        for (int i = 0; i < 7; i++) {
-                                            counter++;
-                                            if (counter == 1) {
-                                                question.equals(line);
-                                                System.out.println(line);
-                                            } else if (counter > 1 && counter < 6) {
-                                                option[j] = line;
-                                                j++;
-                                                System.out.println(line);
-                                            } else if (counter == 6) {
-                                                //point value line
-                                                pointValue = Integer.parseInt(line);
-                                            } else if (counter == 7) {
-                                                //This is the answer line
-                                                answer = scan.nextInt();
-                                                scan.nextLine();
-                                                Question questionBlock = new Question(question, option, pointValue, answer);
-                                                if (answer == Integer.parseInt(line)) {
+                                System.out.println("You have successfully logged in");
 
+                                do {
+                                    System.out.println(studentInputs);
+                                    studentInput = scan.nextInt();
+                                    scan.nextLine();
+                                    if (studentInput != 1 && studentInput != 2) {
+                                        System.out.println("Error. You need to either type 1 or 2.");
+                                    }
+
+                                } while (studentInput != 1 && studentInput != 2);
+
+                                //get grade
+                                if (studentInput == 1) {
+                                    System.out.println("Which quiz would you like to view the grades of?");
+                                    String filename = scan.nextLine();
+                                    try {
+                                        File f1 = new File(filename + ".txt");
+                                        if (!f1.exists()) {
+                                            System.out.println("It looks like you may have mistyped the quiz name");
+                                        } else {
+                                            //TODO Finish this
+                                            int pointsEarned = 0;
+                                            int pointsPossible = 0;
+                                            Quiz quiz = new Quiz("Student", filename, password, username);
+                                            int numQuestions = quiz.numberQuestions(filename);
+                                            String[] grades = new String[numQuestions + 1];
+                                            for (int i = 0; i < numQuestions; i++) {
+                                                //FIXME this is not based on the individual question, but on the entire quiz
+
+                                                grades[i] = i + ". " + quiz.getPointsEarned().get(i) + "/" + quiz.getPossiblePointValues().get(i);
+                                                //TODO I want the last line to be the total points earned/total possible points
+                                                pointsEarned += quiz.getPointsEarned().get(i);
+                                                pointsPossible += quiz.getPossiblePointValues().get(i);
+                                            }
+                                            grades[numQuestions] = pointsEarned + "/" + pointsPossible;
+                                        }
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+
+                                } else {
+                                    System.out.println(quizNameFileInput);
+                                    quizNameFile = scan.nextLine();
+                                    String line = "";
+                                    File f3 = new File(quizNameFile + ".txt");
+                                    if (!f3.exists()) {
+                                        System.out.println("This is not in our system!");
+                                    } else {
+                                        Quiz quiz = new Quiz("Student", quizNameFile, password, username);
+                                        BufferedReader bfrQuiz = new BufferedReader(new FileReader(f3));
+                                        System.out.println(takeQuizPrompt);
+                                        System.out.println(takeQuizMenu);
+                                        int decision = scan.nextInt();
+                                        scan.nextLine();
+                                        if (decision == 1) {
+                                            while ((line = bfrQuiz.readLine()) != null) {
+                                                counter = 0;
+                                                int j = 0;
+                                                int answer;
+                                                String[] option = new String[4];
+                                                String question = "";
+                                                int pointValue = 0;
+                                                for (int i = 0; i < 7; i++) {
+                                                    counter++;
+                                                    if (counter == 1) {
+                                                        question = line;
+                                                        System.out.println(line);
+                                                    } else if (counter > 1 && counter < 6) {
+                                                        option[j] = line;
+                                                        j++;
+                                                        System.out.println(line);
+                                                    } else if (counter == 6) {
+                                                        //point value line
+                                                        pointValue = Integer.parseInt(line);
+                                                    } else if (counter == 7) {
+                                                        //This is the answer line
+                                                        answer = scan.nextInt();
+                                                        scan.nextLine();
+                                                        Question questionBlock = new Question(question, option, pointValue, answer);
+                                                        if (answer == Integer.parseInt(line)) {
+
+                                                        }
+                                                    }
                                                 }
                                             }
+                                        } else if (decision == 2) {
+                                            ArrayList<String> correctAnswers = new ArrayList<>();
+                                            ArrayList<String> possiblePoints = new ArrayList<>();
+                                            ArrayList<String> pointsAccumulated = new ArrayList<>();
+                                            String studentAnswer = "";
+                                            while ((line = bfr.readLine()) != null) {
+                                                counter = 0;
+                                                for (int i = 0; i < 7; i++) {
+                                                    counter++;
+                                                    if (counter != 6 && counter != 7) {
+                                                        System.out.println(line);
+                                                    }
+                                                    if (counter == 7) {
+                                                        correctAnswers.add(line);
+                                                    }
+                                                    if (counter == 6) {
+                                                        possiblePoints.add(line);
+                                                    }
+                                                }
+                                            }
+                                            System.out.println("Please type the name of the file holding your answers");
+                                            String filename = scan.nextLine();
+                                            try {
+                                                File answerFile = new File(filename);
+                                                BufferedReader answerFileReader = new BufferedReader(new FileReader(answerFile));
+                                                    for (int i = 0; i < correctAnswers.size(); i++) {
+                                                        if ((studentAnswer = answerFileReader.readLine()) != null) {
+                                                            if (correctAnswers.get(i).equals(studentAnswer)) {
+                                                                pointsAccumulated.add((i + 1) + ". " + possiblePoints.get(i));
+                                                            } else {
+                                                                pointsAccumulated.add((i + 1) + ". 0");
+                                                            }
+                                                        }
+                                                    }
+
+                                            } catch (FileNotFoundException e) {
+                                                e.printStackTrace();
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            System.out.println("That wasn't an option!");
                                         }
                                     }
                                 }
@@ -264,30 +326,40 @@ public class MainClassTest {
                         String filePassword = "";
                         String userType = "";
                         BufferedReader bfr = new BufferedReader(new FileReader(f));
+                        counter = 0;
                         while ((fileLine = bfr.readLine()) != null) {
                             counter++;
                             if (counter == 2) {
-                                filePassword.equals(fileLine);
+                                filePassword = fileLine;
                             } else if (counter == 3) {
-                                userType.equals(fileLine);
+                                userType = fileLine;
                             }
                         }
                         if (!filePassword.equals(password)) {
                             System.out.println("Incorrect Password!");
                         } else {
-                            System.out.println("You have successfully logged in");
-                            System.out.println(teacherInputs);
-                            teacherInput = scan.nextInt();
-                            scan.nextLine();
-
-                            if (teacherInput == 1) {
-                                //menu for creating quiz
-                            } else if (teacherInput == 2) {
-                                //function to edit quiz or inputs needed
-                            } else if (teacherInput == 3) {
-                                //function to delete quiz, prompt if they want to
+                            if (!userType.equals("2")) {
+                                System.out.println("Incorrect userType!");
                             } else {
-                                //function to view student submission (name wanted)
+                                System.out.println("You have successfully logged in");
+                                System.out.println(teacherInputs);
+                                teacherInput = scan.nextInt();
+                                scan.nextLine();
+
+                                if (teacherInput == 1) {
+                                    //menu for creating quiz
+                                    System.out.println("Write the quiz name");
+                                    String quizName = scan.nextLine();
+                                    Quiz studentQuiz = new Quiz(userType, quizName, password, username);
+                                    studentQuiz.addQuiz(quizName);
+                                    System.out.println("Quiz successfully added");
+                                } else if (teacherInput == 2) {
+                                    //function to edit quiz or inputs needed
+                                } else if (teacherInput == 3) {
+                                    //function to delete quiz, prompt if they want to
+                                } else {
+                                    //function to view student submission (name wanted)
+                                }
                             }
                         }
                     } catch (FileNotFoundException e) {
@@ -316,13 +388,13 @@ public class MainClassTest {
                     String filePassword = "";
                     String userType = "";
                     BufferedReader bfr = new BufferedReader(new FileReader(f));
-
+                    counter = 0;
                     while ((fileLine = bfr.readLine()) != null) {
                         counter++;
                         if (counter == 2) {
-                            filePassword.equals(fileLine);
+                            filePassword = fileLine;
                         } else if (counter == 3) {
-                            userType.equals(fileLine);
+                            userType = fileLine;
                         }
                     }
 
@@ -330,7 +402,6 @@ public class MainClassTest {
                         System.out.println("Incorrect Password!");
 
                     } else {
-
                         System.out.println("You have successfully logged in");
                         //do while loop here (do here)
                         System.out.println("Are you sure you want to delete this account?");
@@ -360,6 +431,8 @@ public class MainClassTest {
                     e.printStackTrace();
                 }
 
+                //DO NOT CHANGE ACCOUNT INPUT 4
+                //IT WORKS PERFECTLY
             } else if (accountInput == 4) {
 
                 //code for edit account
@@ -376,15 +449,15 @@ public class MainClassTest {
                     String userType = "";
                     BufferedReader bfr = new BufferedReader(new FileReader(f));
                     ArrayList<String> list = new ArrayList<>();
-
+                    counter = 0;
                     while ((fileLine = bfr.readLine()) != null) {
                         //read whole file
                         counter++;
                         list.add(fileLine);
                         if (counter == 2) {
-                            filePassword.equals(fileLine);
+                            filePassword = fileLine;
                         } else if (counter == 3) {
-                            userType.equals(fileLine);
+                            userType = fileLine;
                         }
                     }
 
@@ -449,8 +522,11 @@ public class MainClassTest {
                     System.out.println("Oops! That wasn't an option");
                 }
             } while (somethingElse != 1 && somethingElse != 2);
-        } while (somethingElse == 1) ;
 
+
+        } while (somethingElse == 1);
+
+        System.out.println("Thank you for using Quiz Maker!");
 
     }
 
@@ -562,4 +638,34 @@ public class MainClassTest {
             e.printStackTrace();
         }
         */
+
+    /*
+        Code to input question and options
+
+
+        String question = "";
+        String optionOne = "";
+        String optionTwo = "";
+        String optionThree = "";
+        String optionFour = "";
+
+        System.out.println("Please enter your question");
+        question = scan.nextLine();
+
+        for (int i = 1; i < 5; i++) {
+            System.out.printf("Please enter option %f: \n", i);
+            if (i == 1) {
+                optionOne == scan.nextLine();
+            } else if (i == 2) {
+                optionTwo == scan.nextLine();
+            } else if (i == 3) {
+                optionThree == scan.nextLine();
+            } else {
+                optionFour == scan.nextLine();
+            }
+          }
+          //define method and call method
+        }
+
+     */
 }

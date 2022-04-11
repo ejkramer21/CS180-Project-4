@@ -77,8 +77,7 @@ public class Quiz {
         return numQuestions;
     }
 
-    public void addQuiz(String filename, String question, String optionOne, String optionTwo, String optionThree,
-                        String optionFour, int answer, int pointValue) throws IncorrectAccountException, FileNotFoundException {
+    public void addQuiz(String filename) throws IncorrectAccountException, FileNotFoundException {
         try {
             if (userType.equalsIgnoreCase("2")) {
                 //This is creating the original quiz with just the first question.  The constructor for this one should be Question(String question, String[] option, int answer).
@@ -88,7 +87,7 @@ public class Quiz {
                 if (!studentTestFile.exists()) {
                     studentTestFile.createNewFile();
 
-                    String[] options = new String[4];
+                    /*String[] options = new String[4];
                     options[0] = "1. " + optionOne;
                     options[1] = "2. " + optionTwo;
                     options[2] = "3. " + optionThree;
@@ -100,6 +99,8 @@ public class Quiz {
                     pw.println(firstQuestion);
                     pw.close();
                     fos.close();
+
+                     */
                 } else {
                     throw new QuizAlreadyExistsException("This quiz already exists!  Are you sure you aren't trying to add a new question or rename the quiz?");
                 }
@@ -119,7 +120,7 @@ public class Quiz {
     public void randomize() {
         int questionCount = this.allQuizQuestions.size();
         ArrayList<String> tempArray = this.allQuizQuestions;
-        while(questionCount != 0){
+        while (questionCount != 0) {
             int randomQuestionNumber = (int) Math.random() * (questionCount - 1);
             this.randomizedQuizQuestions.add(tempArray.get(randomQuestionNumber));
             tempArray.remove(randomQuestionNumber);
@@ -203,7 +204,7 @@ public class Quiz {
                     String[] newOptions = new String[4];
                     int j = 0;
                     for (i = 0; i < questionComponents.size(); i++) {
-                        for (j = 0; j < 5; j++) {
+                        for (j = 0; j < 4; j++) {
                             newOptions[j] = questionComponents.get(i + 1);
                         }
                         new Question(questionComponents.get(i), newOptions, Integer.parseInt(questionComponents.get(j + 2)), Integer.parseInt(questionComponents.get(j + 1)));
@@ -225,9 +226,9 @@ public class Quiz {
         int counter = 0;
         String line = "";
         String individualQuestion = "";
-        while((line = bfr.readLine()) != null){
+        while ((line = bfr.readLine()) != null) {
             counter++;
-            if(counter % 7 == 0){
+            if (counter % 7 == 0) {
                 this.allQuizQuestions.add(individualQuestion);
                 individualQuestion = "";
                 counter = 0;
@@ -238,78 +239,4 @@ public class Quiz {
         }
         bfr.close();
     }
-
-    //sample main method for adding quiz
-    //doesn't actually work atm because we need to connect with accounts.  This is just a sample to give idea of what this should look like
-    /*public static void main(String[] args) throws IOException {
-        Scanner in = new Scanner(System.in);
-        if (account.getUserType.equalsIgnoreCase("Teacher")) {
-            System.out.println("Add a quiz");
-            int yes = in.nextInt();
-            in.nextLine();
-            do {
-                if (yes == 1) {
-                    String[] options = new String[4];
-                    System.out.println("Input a filename");
-                    String filename = in.nextLine();
-                    System.out.println("Question");
-                    String question = in.nextLine();
-                    System.out.println("option 1");
-                    options[0] = in.nextLine();
-                    System.out.println("2");
-                    options[1] = in.nextLine();
-                    System.out.println("3");
-                    options[2] = in.nextLine();
-                    System.out.println("4");
-                    options[3] = in.nextLine();
-                    System.out.println("Input answer as an int of either option 1 as 1 etc.");
-                    int answer = in.nextInt();
-                    in.nextLine();
-                    System.out.println("Input point value");
-                    int pointValue = in.nextInt();
-                    in.nextLine();
-                    Question question1 = new Question(question, options, answer);
-                    //still need the account info.  I imagine that we would be using an account created earlier in the main
-                    //method so accidentally creating a new account with the same information shouldn't be an issue
-                    Quiz quiz = new Quiz(account.getUserType(), question1, filename, account.getPassword(), account.getUsername());
-                    try {
-                        quiz.addQuiz(filename, question, options[0], options[1], options[2], options[3], answer);
-                    } catch (IncorrectAccountException e) {
-
-                    } catch (FileNotFoundException e) {
-
-                    } catch (Exception e) {
-
-                    }
-                } else if (yes == 2) {
-
-                } else {
-                    System.out.println("That wasn't an option!");
-                }
-            } while (yes != 1 || yes != 2);
-        } else if (account.getUserType.equalsIgnoreCase("Student")) {
-            System.out.println("Choose a quiz to take");
-            String filename = in.nextLine();
-            Quiz quiz = new Quiz(account.getUsetType(), filename, account.getPassword(), account.getUsername());
-            BufferedReader bfr = new BufferedReader(new FileReader(filename));
-            int i = 0;
-            while (bfr.readLine() != null) {
-                while (i < 6) {
-                    System.out.println(bfr.readLine());
-                    i++;
-                }
-                String correctAnswer = bfr.readLine();
-                int studentAnswer = in.nextInt();
-                in.nextLine();
-                if (studentAnswer == Integer.parseInt(correctAnswer)) {
-                    quiz.setPointsEarned(quiz.getPointsEarned().add(question.getPointValue));
-                } else {
-                    //This is still a work in progress
-                    //couldn't just add zero because it takes in an array list so I made it work
-                    quiz.setPointsEarned(quiz.getPointsEarned().add(question.getPointValue() - question.getPointValue()));
-                }
-            }
-
-        }
-    }*/
 }
