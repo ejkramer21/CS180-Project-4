@@ -1,6 +1,8 @@
 # CS180-Project-4: Learning Management System
 Ananya Seetharaman, Erin Joy Kramer, Alex Lam, James Kor
+
 Ananya Seetharman- Submitted Report on Brightspace
+
 Erin Joy Kramer - Submitted Vocareum Workspace
 
 InvalidAccountException.java - an exception that is thrown when an invalid account is entered
